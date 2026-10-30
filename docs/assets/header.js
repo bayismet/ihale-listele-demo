@@ -1,7 +1,8 @@
 "use strict";
 
 const navigation = [
-  { href: "/", label: "İhaleler" },
+  { href: "/", label: "Ana sayfa" },
+  { href: "/tenders", label: "İhaleler" },
   { href: "/sources/bik", label: "Veri aktarımları", adminOnly: true, sources: true },
   { href: "/admin/llm", label: "LLM çağrıları", adminOnly: true },
   { href: "/admin/connection", label: "Bağlantı", adminOnly: true },
@@ -47,7 +48,7 @@ class SiteHeader extends HTMLElement {
     const nav = document.createElement("nav");
     nav.setAttribute("aria-label", "Ana menü");
     const currentPath = IhaleApp.path.startsWith("/tenders/")
-      ? "/"
+      ? "/tenders"
       : IhaleApp.path.replace(/\/$/, "") || "/";
 
     for (const item of navigation) {

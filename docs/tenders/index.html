@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Kamu ve özel sektör ihalelerini arayın, kaynağından inceleyin.">
+  <title>İhaleler · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=f69f216de057">
+  <script src="/ihale-listele-demo/assets/app-config.js?v=f58f4f5b35e2"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script><script src="/ihale-listele-demo/assets/header.js?v=ea491505b6fd" defer></script>
+  <script src="/ihale-listele-demo/assets/catalog.js?v=6875255967f7" defer></script>
+</head>
+<body data-requires-member>
+  <site-header></site-header>
+  <main id="main">
+    <section id="catalog-view">
+      <div class="intro"><p class="eyebrow"><span class="small-line"></span> YENİ İŞLERE AÇILAN KAPI</p><h1>Bir sonraki işiniz<br> <em>burada başlayabilir.</em></h1><p class="intro-copy">İhaleleri keşfedin, işinize uygun fırsatları kaynağından inceleyin.</p></div>
+      <form id="search-form" role="search" class="search-bar" action="/ihale-listele-demo/tenders" method="get">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
+        <label class="sr-only" for="q">İhale, kurum veya İKN ara</label><input id="q" name="q" type="search" maxlength="200" placeholder="İhale, kurum veya İKN ara" autocomplete="off"><button class="primary" type="submit">İhale ara <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="catalog-layout">
+        <aside class="filters" aria-label="İhale filtreleri">
+          <div class="filter-heading"><h2>Filtreler</h2><button type="button" id="clear-filters">Temizle</button></div>
+          <label for="activity_status">İhale durumu</label><select form="search-form" name="activity_status" id="activity_status"><option value="active">Aktif ihaleler</option><option value="inactive">Pasif ihaleler</option><option value="unknown">Durumu belirsiz</option><option value="all">Tüm ihaleler</option></select><label for="source_id">Kaynak</label><select form="search-form" name="source_id" id="source_id"><option value="">Tüm kaynaklar</option></select>
+          <label for="category">Kategori</label><select form="search-form" name="category" id="category"><option value="">Tüm kategoriler</option></select>
+          <div id="city-filter" class="filter-group"><label for="city">Şehir</label><select form="search-form" name="city" id="city"><option value="">Tüm şehirler</option></select></div>
+          <fieldset><legend>Yayın tarihi</legend><label class="date-label" for="published_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="published_from" name="published_from"><label class="date-label" for="published_to">Bu tarihe kadar</label><input form="search-form" type="date" id="published_to" name="published_to"></fieldset>
+          <fieldset><legend>İhale tarihi</legend><label class="date-label" for="tender_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="tender_from" name="tender_from"><label class="date-label" for="tender_to">Bu tarihe kadar</label><input form="search-form" type="date" id="tender_to" name="tender_to"></fieldset>
+          <details class="deadline-filter"><summary>Son teklif tarihi</summary><fieldset><label class="date-label" for="deadline_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="deadline_from" name="deadline_from"><label class="date-label" for="deadline_to">Bu tarihe kadar</label><input form="search-form" type="date" id="deadline_to" name="deadline_to"></fieldset></details>
+          <div class="source-note"><span aria-hidden="true">↗</span><p>Her ilanda kaynak bağlantısını bulabilir, ayrıntıları yayımlayan kurumdan inceleyebilirsiniz.</p></div>
+        </aside>
+        <section class="results" aria-labelledby="result-heading">
+          <div class="result-heading"><h2 id="result-heading" aria-live="polite">İlanlar yükleniyor…</h2><label class="sr-only" for="sort">Sıralama</label><select id="sort" name="sort" form="search-form" class="sort-select"><option value="published">Yayın tarihi en yeni</option><option value="added">Son eklenenler</option></select></div>
+          <div id="result-message" role="status" class="message" hidden></div>
+          <div id="results" aria-busy="true"></div>
+          <nav id="pagination" class="pagination" aria-label="Sonuç sayfaları" hidden><button id="previous-page" type="button">← Önceki</button><span id="page-label"></span><button id="next-page" type="button">Sonraki →</button></nav>
+        </section>
+      </div>
+    </section>
+    <section id="detail-view" hidden><a class="back-link" id="back-to-results" href="/ihale-listele-demo/tenders">← İhalelere dön</a><div id="detail-content" aria-live="polite"><p class="message">İlan yükleniyor…</p></div></section>
+  </main>
+  <footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>İş fırsatlarına daha açık bir pencere.</span><a href="/ihale-listele-demo/submissions/form">İlanınızı paylaşın ↗</a></footer>
+</body>
+</html>

@@ -177,7 +177,7 @@ async function initDetail(id) {
   $("detail-view").hidden = false;
   const backParams = new URLSearchParams(location.search);
   backParams.delete("tender");
-  $("back-to-results").href = IhaleApp.href(`/${backParams.size ? "?" + backParams : ""}`);
+  $("back-to-results").href = IhaleApp.href(`/tenders${backParams.size ? "?" + backParams : ""}`);
   try {
     const item = await json(`/api/tenders/${encodeURIComponent(id)}`);
     document.title = `${item.title} · İhale Listele`;
@@ -287,6 +287,9 @@ $("previous-page").addEventListener("click", () => changePage(-1));
 $("next-page").addEventListener("click", () => changePage(1));
 window.addEventListener("popstate", () => {restoreForm(); loadResults();});
 const detailMatch = IhaleApp.path.match(/^\/tenders\/([0-9a-f-]+)$/i) || (IhaleApp.remote && /^[0-9a-f-]{36}$/i.test(new URLSearchParams(location.search).get("tender") || "") ? [null, new URLSearchParams(location.search).get("tender")] : null);
-initFavorites().finally(() => {
-  if (detailMatch) initDetail(detailMatch[1]); else initCatalog();
+IhaleApp.memberReady.then(allowed => {
+  if (!allowed) return;
+  initFavorites().finally(() => {
+    if (detailMatch) initDetail(detailMatch[1]); else initCatalog();
+  });
 });

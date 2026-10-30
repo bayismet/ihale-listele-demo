@@ -3,41 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Kamu ve özel sektör ihalelerini arayın, kaynağından inceleyin.">
-  <title>İhale Listele · İşinize uygun fırsatlar</title>
-  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-navigation">
-  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script><script src="/ihale-listele-demo/assets/header.js?v=20261030-navigation" defer></script>
-  <script src="/ihale-listele-demo/assets/catalog.js?v=20261030-activity" defer></script>
+  <meta name="description" content="İşinize uygun ihaleleri bulun, favorilerinize ekleyin ve takviminizde takip edin. İhale Listele'ye üye olarak başlayın.">
+  <title>İhale Listele · Sıradaki işinize bir adım daha yakın</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=f69f216de057">
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/home.css?v=9c76957d31a4">
+  <script src="/ihale-listele-demo/assets/app-config.js?v=f58f4f5b35e2"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script>
+  <script src="/ihale-listele-demo/assets/header.js?v=ea491505b6fd" defer></script>
+  <script src="/ihale-listele-demo/assets/home.js?v=9480c9350ba5" defer></script>
 </head>
 <body>
   <site-header></site-header>
-  <main id="main">
-    <section id="catalog-view">
-      <div class="intro"><p class="eyebrow"><span class="small-line"></span> YENİ İŞLERE AÇILAN KAPI</p><h1>Bir sonraki işiniz<br> <em>burada başlayabilir.</em></h1><p class="intro-copy">İhaleleri keşfedin, işinize uygun fırsatları kaynağından inceleyin.</p></div>
-      <form id="search-form" role="search" class="search-bar" action="/ihale-listele-demo/" method="get">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg>
-        <label class="sr-only" for="q">İhale, kurum veya İKN ara</label><input id="q" name="q" type="search" maxlength="200" placeholder="İhale, kurum veya İKN ara" autocomplete="off"><button class="primary" type="submit">İhale ara <span aria-hidden="true">→</span></button>
-      </form>
-      <div class="catalog-layout">
-        <aside class="filters" aria-label="İhale filtreleri">
-          <div class="filter-heading"><h2>Filtreler</h2><button type="button" id="clear-filters">Temizle</button></div>
-          <label for="activity_status">İhale durumu</label><select form="search-form" name="activity_status" id="activity_status"><option value="active">Aktif ihaleler</option><option value="inactive">Pasif ihaleler</option><option value="unknown">Durumu belirsiz</option><option value="all">Tüm ihaleler</option></select><label for="source_id">Kaynak</label><select form="search-form" name="source_id" id="source_id"><option value="">Tüm kaynaklar</option></select>
-          <label for="category">Kategori</label><select form="search-form" name="category" id="category"><option value="">Tüm kategoriler</option></select>
-          <div id="city-filter" class="filter-group"><label for="city">Şehir</label><select form="search-form" name="city" id="city"><option value="">Tüm şehirler</option></select></div>
-          <fieldset><legend>Yayın tarihi</legend><label class="date-label" for="published_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="published_from" name="published_from"><label class="date-label" for="published_to">Bu tarihe kadar</label><input form="search-form" type="date" id="published_to" name="published_to"></fieldset>
-          <fieldset><legend>İhale tarihi</legend><label class="date-label" for="tender_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="tender_from" name="tender_from"><label class="date-label" for="tender_to">Bu tarihe kadar</label><input form="search-form" type="date" id="tender_to" name="tender_to"></fieldset>
-          <details class="deadline-filter"><summary>Son teklif tarihi</summary><fieldset><label class="date-label" for="deadline_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="deadline_from" name="deadline_from"><label class="date-label" for="deadline_to">Bu tarihe kadar</label><input form="search-form" type="date" id="deadline_to" name="deadline_to"></fieldset></details>
-          <div class="source-note"><span aria-hidden="true">↗</span><p>Her ilanda kaynak bağlantısını bulabilir, ayrıntıları yayımlayan kurumdan inceleyebilirsiniz.</p></div>
-        </aside>
-        <section class="results" aria-labelledby="result-heading">
-          <div class="result-heading"><h2 id="result-heading" aria-live="polite">İlanlar yükleniyor…</h2><label class="sr-only" for="sort">Sıralama</label><select id="sort" name="sort" form="search-form" class="sort-select"><option value="published">Yayın tarihi en yeni</option><option value="added">Son eklenenler</option></select></div>
-          <div id="result-message" role="status" class="message" hidden></div>
-          <div id="results" aria-busy="true"></div>
-          <nav id="pagination" class="pagination" aria-label="Sonuç sayfaları" hidden><button id="previous-page" type="button">← Önceki</button><span id="page-label"></span><button id="next-page" type="button">Sonraki →</button></nav>
-        </section>
+  <main id="main" class="home-main">
+    <section class="home-hero" aria-labelledby="home-heading">
+      <div class="home-copy">
+        <p class="eyebrow"><span class="small-line"></span> YENİ İŞLERE AÇILAN KAPI</p>
+        <h1 id="home-heading">Fırsatları bulun.<br><em>Sıradaki işinize<br>odaklanın.</em></h1>
+        <p class="home-lead">İşinize uygun ihaleleri tek bir yerden keşfedin. İlginizi çekenleri kaydedin, önemli tarihleri takviminizde takip edin.</p>
+        <div class="home-actions">
+          <a class="primary" id="home-start" href="/ihale-listele-demo/account?mode=register&amp;next=%2Ftenders">Ücretsiz üye ol <span aria-hidden="true">→</span></a>
+          <a class="home-login" id="home-login" href="/ihale-listele-demo/account?next=%2Ftenders">Giriş yap <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="home-membership" id="home-membership">İhaleleri görüntülemek için üye olun. Hesabınız hemen kullanıma açılsın.</p>
+      </div>
+      <div class="home-visual" aria-label="İhale takibinin üç adımı">
+        <div class="home-visual-heading"><span class="home-visual-dot" aria-hidden="true"></span> FIRSATTAN TAKİBE</div>
+        <ol class="home-flow">
+          <li><span class="home-step" aria-hidden="true">01</span><div><h2>Size uygun olanı bulun</h2><p>Kelime, şehir, sektör ve tarihe göre arayın.</p><div class="home-chips" aria-hidden="true"><span>Şehir</span><span>Sektör</span><span>Tarih</span></div></div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 5 5"/></svg></li>
+          <li><span class="home-step" aria-hidden="true">02</span><div><h2>Takip listenizi oluşturun</h2><p>İlginizi çeken ihaleleri favorilerinize ekleyin.</p></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.3.9-4.6 4.4 1.1 6.3-5.6-3-5.6 3 1.1-6.3L2.9 9.6l6.3-.9Z"/></svg></li>
+          <li><span class="home-step" aria-hidden="true">03</span><div><h2>Tarihleri bir arada görün</h2><p>Favori ihalelerinizin son teklif tarihlerini takviminizden izleyin.</p></div><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 11h18m-13 4h3m2 0h3"/></svg></li>
+        </ol>
+        <div class="home-visual-foot"><span aria-hidden="true">↗</span> Her ihale, ayrıntılarını inceleyebileceğiniz kaynak bağlantısıyla.</div>
       </div>
     </section>
-    <section id="detail-view" hidden><a class="back-link" id="back-to-results" href="/ihale-listele-demo/">← İhalelere dön</a><div id="detail-content" aria-live="polite"><p class="message">İlan yükleniyor…</p></div></section>
+    <section class="home-features" aria-label="İhale Listele ile neler yapabilirsiniz?">
+      <div><span class="home-feature-number">01 / KEŞFEDİN</span><h2>Aramanıza odaklanın.</h2><p>Farklı kaynaklardan gelen ilanları işinize uygun filtrelerle inceleyin.</p></div>
+      <div><span class="home-feature-number">02 / KAYDEDİN</span><h2>Fırsatlarınız elinizin altında.</h2><p>Size özel favori listenizle ilgilendiğiniz ihalelere kolayca dönün.</p></div>
+      <div><span class="home-feature-number">03 / PLANLAYIN</span><h2>Önemli tarihlere hazırlanın.</h2><p>Son teklif tarihlerini aylık takvimde görün, hazırlığınızı planlayın.</p></div>
+    </section>
   </main>
   <footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>İş fırsatlarına daha açık bir pencere.</span><a href="/ihale-listele-demo/submissions/form">İlanınızı paylaşın ↗</a></footer>
 </body>

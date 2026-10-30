@@ -8,6 +8,8 @@ window.IhaleApp = (() => {
   const defaultApi = config.apiUrl || "";
   let resolveAdmin;
   const adminReady = new Promise(resolve => { resolveAdmin = resolve; });
+  let resolveMember;
+  const memberReady = new Promise(resolve => { resolveMember = resolve; });
   function apiOrigin(value) {
     const url = new URL(value);
     const local = ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname);
@@ -47,9 +49,14 @@ window.IhaleApp = (() => {
         headers.set("X-Ihale-Session", "bearer");
       }
     }
-    return nativeFetch(`${remote ? api : ""}${path}`, {
+    const response = await nativeFetch(`${remote ? api : ""}${path}`, {
       ...options, headers, credentials: remote ? "omit" : "same-origin", redirect: "error",
     });
+    if (response.status === 401 && document.body?.dataset.memberAccess === "true") {
+      clearSession();
+      location.replace(href(`/account?next=${encodeURIComponent(location.pathname + location.search)}`));
+    }
+    return response;
   }
   function href(path) {
     if (!path.startsWith("/") || path.startsWith("//")) return path;
@@ -58,7 +65,7 @@ window.IhaleApp = (() => {
     const detail = url.pathname.match(/^\/tenders\/([0-9a-f-]+)$/i);
     if (remote && detail) {
       url.searchParams.set("tender", detail[1]);
-      return `${base}/${url.search}${url.hash}`;
+      return `${base}/tenders/${url.search}${url.hash}`;
     }
     return `${base}${path}`;
   }
@@ -95,7 +102,8 @@ window.IhaleApp = (() => {
     setTimeout(() => URL.revokeObjectURL(blob), 60000);
   }
   const result = {
-    remote, adminReady, fetch: request, href, acceptSession, clearSession, probe, saveApi, download,
+    remote, adminReady, memberReady, fetch: request, href, acceptSession,
+    clearSession, probe, saveApi, download,
     get apiUrl() { return api || location.origin; },
     get path() {
       return base && location.pathname.startsWith(`${base}/`)
@@ -103,8 +111,11 @@ window.IhaleApp = (() => {
     },
   };
   document.addEventListener("DOMContentLoaded", async () => {
-    if (!remote || !document.body.hasAttribute("data-requires-admin")) {
+    const needsAdmin = document.body.hasAttribute("data-requires-admin");
+    const needsMember = document.body.hasAttribute("data-requires-member");
+    if (!needsAdmin && !needsMember) {
       resolveAdmin(true);
+      resolveMember(true);
       return;
     }
     try {
@@ -112,20 +123,27 @@ window.IhaleApp = (() => {
       const user = response.ok ? (await response.json()).user : null;
       if (!user) {
         resolveAdmin(false);
-        location.replace(href(`/account?next=${encodeURIComponent(location.pathname)}`));
-      } else if (user.role !== "admin") {
+        resolveMember(false);
+        location.replace(href(`/account?next=${encodeURIComponent(location.pathname + location.search)}`));
+      } else if (needsAdmin && user.role !== "admin") {
         document.querySelector("main").textContent = "Bu ekran yönetici hesabı gerektiriyor.";
         document.body.removeAttribute("data-requires-admin");
         resolveAdmin(false);
+        resolveMember(true);
       } else {
         document.body.removeAttribute("data-requires-admin");
+        document.body.removeAttribute("data-requires-member");
+        if (needsMember) document.body.dataset.memberAccess = "true";
         resolveAdmin(true);
+        resolveMember(true);
       }
     } catch (_) {
       const main = document.querySelector("main");
       main.textContent = "Mac'teki API'ye ulaşılamıyor. Mac'in ve bağlantının açık olduğunu kontrol edin.";
       document.body.removeAttribute("data-requires-admin");
+      document.body.removeAttribute("data-requires-member");
       resolveAdmin(false);
+      resolveMember(false);
     }
   });
   return result;

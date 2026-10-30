@@ -77,7 +77,7 @@ $("account-form").addEventListener("submit", async event => {
     IhaleApp.acceptSession(body);
     showAccount(body.user);
     alertMessage(mode === "register" ? "Üyeliğiniz oluşturuldu ve hemen aktif edildi." : "Giriş yaptınız.");
-    if (safeNextPath) location.assign(IhaleApp.href(safeNextPath));
+    location.assign(IhaleApp.href(safeNextPath || "/tenders"));
   } catch (error) {
     alertMessage(error.message || "İstek tamamlanamadı. Tekrar deneyin.", true);
   } finally {
@@ -101,5 +101,8 @@ $("logout-button").addEventListener("click", async () => {
 
 setMode(mode);
 getCurrentUser().then(user => {
-  if (user) showAccount(user);
+  if (user) {
+    showAccount(user);
+    if (safeNextPath) location.assign(IhaleApp.href(safeNextPath));
+  }
 }).catch(() => alertMessage("Hesap bilgileri şu anda yüklenemiyor.", true));

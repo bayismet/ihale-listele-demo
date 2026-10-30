@@ -42,7 +42,7 @@ function render(state) {
   for (const [id, key] of [["pages", "pages_completed"], ["created", "created"], ["updated", "updated"], ["skipped", "skipped"]]) {
     $(`batch-${id}`).textContent = state.batch[key] === undefined ? "—" : numbers.format(state.batch[key]);
   }
-  if (state.source_id) $("bik-tenders").href = IhaleApp.href(`/?source_id=${encodeURIComponent(state.source_id)}`);
+  if (state.source_id) $("bik-tenders").href = IhaleApp.href(`/tenders?source_id=${encodeURIComponent(state.source_id)}`);
   $("batch-details").textContent = state.batch.details_completed === undefined ? "" : `Kontrol edilen ilan ayrıntısı: ${numbers.format(state.batch.details_completed)}`;
   if (!state.can_resume && $("transfer-mode").value === "resume") $("transfer-mode").value = "recent";
   $("mode-description").textContent = descriptions[$("transfer-mode").value];
