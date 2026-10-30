@@ -9,7 +9,6 @@ const navigation = [
   { href: "/favorites", label: "Favorilerim", memberOnly: true },
   { href: "/calendar", label: "Takvim", memberOnly: true },
   { href: "/account", label: "Giriş / Üye ol", account: true },
-  { href: "/submissions/form", label: "İlan gönder", submit: true },
 ];
 
 class SiteHeader extends HTMLElement {
@@ -64,13 +63,6 @@ class SiteHeader extends HTMLElement {
         link.hidden = true;
       }
       if (item.account) link.dataset.accountLink = "true";
-      if (item.submit) {
-        link.className = "submit-link";
-        const arrow = document.createElement("span");
-        arrow.setAttribute("aria-hidden", "true");
-        arrow.textContent = "↗";
-        link.append(" ", arrow);
-      }
       if (currentPath === item.href || (item.sources &&
           ["/sources/bik", "/sources/ekap/bulletins"].includes(currentPath))) {
         link.classList.add("nav-active");
