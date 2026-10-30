@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sektör incelemesi · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-navigation">
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/review.css?v=20261029-shared-header">
+  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script><script src="/ihale-listele-demo/assets/header.js?v=20261030-navigation" defer></script>
+  <script src="/ihale-listele-demo/assets/review.js?v=20261026-review" defer></script>
+<style>[data-requires-admin] main{visibility:hidden}</style></head>
+<body data-requires-admin>
+  <site-header></site-header>
+  <main id="main" class="review-main">
+    <div class="review-intro">
+      <div><p class="eyebrow"><span class="small-line"></span> SEKTÖR İNCELEMESİ</p><h1>Son söz <em>sizde.</em></h1><p class="intro-copy">İlanı inceleyin, uygun sektörü seçin ve kararınızı kaydedin.</p></div>
+      <div class="pending-summary"><strong id="pending-total">—</strong><span>tüm kaynaklarda bekleyen ilan</span></div>
+    </div>
+    <div id="review-notice" class="review-notice" role="status" hidden></div>
+    <div id="review-error" class="review-error" role="alert" hidden></div>
+    <form id="review-filters" class="review-filters" role="search">
+      <div class="review-search"><label for="review-query">İlan, kurum veya İKN ara</label><input type="search" id="review-query" name="q" maxlength="200" placeholder="İncelenecek ilanı bulun" autocomplete="off"></div>
+      <div><label for="review-source">Kaynak</label><select id="review-source" name="source_id"><option value="">Tüm kaynaklar</option></select></div>
+      <div><label for="review-method">Önerinin kaynağı</label><select id="review-method" name="method"><option value="">Tüm öneriler</option><option value="llm">Yerel model</option><option value="rules">Anahtar kelime kuralları</option><option value="source">Kaynak eşlemesi</option></select></div>
+      <button class="primary" id="search-reviews" type="submit">Ara</button><button class="text-button" id="clear-review-filters" type="button">Temizle</button>
+    </form>
+    <div class="review-layout">
+      <section class="review-list-panel" aria-labelledby="queue-heading">
+        <div class="queue-heading"><h2 id="queue-heading" aria-live="polite">İlanlar yükleniyor…</h2><button id="reload-reviews" class="text-button" type="button">Yenile ↻</button></div>
+        <div id="review-list" aria-busy="true"></div>
+        <nav id="review-pagination" class="pagination" aria-label="İnceleme sayfaları" hidden><button id="previous-review-page" type="button">← Önceki</button><span id="review-page-label"></span><button id="next-review-page" type="button">Sonraki →</button></nav>
+      </section>
+      <section id="review-detail" class="review-detail" aria-label="Seçilen ilanı incele" aria-busy="true"><div class="message">İlan bilgileri yükleniyor…</div></section>
+    </div>
+  </main>
+  <footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>Her karar, daha doğru bir eşleşme.</span><a href="/ihale-listele-demo/">İhalelere dön ↗</a></footer>
+</body>
+</html>

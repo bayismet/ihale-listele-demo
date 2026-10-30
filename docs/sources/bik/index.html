@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BİK aktarımı · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-navigation">
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/bik.css?v=20261026-metadata">
+  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script><script src="/ihale-listele-demo/assets/header.js?v=20261030-navigation" defer></script>
+  <script src="/ihale-listele-demo/assets/bik.js?v=20261026-metadata" defer></script>
+<style>[data-requires-admin] main{visibility:hidden}</style></head>
+<body data-requires-admin>
+  <site-header></site-header>
+  <main id="main" class="bik-main">
+    <div class="intro"><p class="eyebrow"><span class="small-line"></span> KAYNAK YÖNETİMİ</p><h1>BİK ilanları, <em>tek yerden.</em></h1><p class="intro-copy">Basın İlan Kurumu’nun ilan.gov.tr portalındaki ihale ilanlarını aktarın ve güncel tutun.</p></div>
+    <div id="control-error" class="control-error" role="alert" hidden></div>
+    <section class="bik-summary" aria-label="BİK ilan özeti">
+      <div><span>Kayıtlı BİK ilanı</span><strong id="total-records">—</strong><a id="bik-tenders" href="/ihale-listele-demo/">İlanları incele ↗</a></div>
+      <div><span>En yeni ilan tarihi</span><strong id="newest-publication">—</strong><small>Kaynakta belirtilen yayın tarihi</small></div>
+      <div><span>Son ulaşılan sayfa</span><strong id="last-page">—</strong><small>Kaydedilen son aktarım noktası</small></div>
+    </section>
+    <div class="bik-layout">
+      <section class="bik-panel" aria-labelledby="transfer-heading">
+        <p class="eyebrow">AKTARIM</p><h2 id="transfer-heading">İlanları güncelleyin</h2>
+        <form id="transfer-form">
+          <label for="transfer-mode">Yapılacak işlem</label>
+          <select id="transfer-mode" name="mode" aria-describedby="mode-description" disabled>
+            <option value="recent">Yeni ilanları kontrol et</option>
+            <option value="full">Tüm listeyi tara</option>
+            <option id="resume-option" value="resume" disabled>Kaldığı yerden devam et</option>
+          </select>
+          <p id="mode-description" class="bik-help">İlk 10 sayfayı tarar. Yeni ilanları ekler, değişen kayıtları günceller.</p>
+          <div class="bik-actions"><button class="primary" id="start-transfer" type="submit" disabled>Aktarımı başlat <span aria-hidden="true">→</span></button><button class="secondary" id="stop-transfer" type="button" disabled>Durdur</button></div>
+        </form>
+        <div class="bik-note"><span aria-hidden="true">✓</span><p>Kayıtlı ilanlar tekrar eklenmez. Ekranı kapatsanız da başlattığınız aktarım devam eder.</p></div>
+      </section>
+      <section class="bik-panel" aria-labelledby="progress-heading">
+        <div class="bik-panel-top"><p class="eyebrow">ÇALIŞMA DURUMU</p><button class="text-button" id="refresh-status" type="button">Yenile ↻</button></div>
+        <div class="job-state"><span id="state-dot" aria-hidden="true"></span><h2 id="progress-heading">Durum yükleniyor…</h2></div>
+        <p id="job-message" role="status">Son aktarım bilgileri alınıyor.</p>
+        <dl class="job-counts">
+          <div><dt>İşlenen sayfa</dt><dd id="batch-pages">—</dd></div>
+          <div><dt>Yeni ilan</dt><dd id="batch-created">—</dd></div>
+          <div><dt>Güncellenen</dt><dd id="batch-updated">—</dd></div>
+          <div><dt>Değişmeyen</dt><dd id="batch-skipped">—</dd></div>
+        </dl>
+        <p class="bik-help">Sayılar devam eden veya son yapılan çalışmaya aittir.</p>
+        <p class="bik-help" id="batch-details"></p>
+        <div class="last-check"><span>Son durum kaydı</span><time id="last-checked">—</time></div>
+      </section>
+    </div>
+    <p class="bik-footnote">Bu yönetim ekranı yalnızca yönetici hesabıyla kullanılabilir. Aktarımlar buradan başlatılır; henüz zamanlanmış otomatik güncelleme yok.</p>
+  </main>
+  <footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>Kaynağından gelen iş fırsatları.</span><a href="https://www.ilan.gov.tr/ilan/tum-ilanlar/ihale?ats=3" target="_blank" rel="noopener noreferrer">BİK kaynağını aç ↗</a></footer>
+</body>
+</html>

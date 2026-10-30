@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EKAP oturumu · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-navigation">
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/ekap.css?v=20261026-ekap">
+  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script><script src="/ihale-listele-demo/assets/header.js?v=20261030-navigation" defer></script>
+  <script src="/ihale-listele-demo/assets/ekap.js?v=20261026-ekap" defer></script>
+<style>[data-requires-admin] main{visibility:hidden}</style></head>
+<body data-requires-admin>
+  <site-header></site-header>
+  <main id="main" class="ekap-main">
+    <div class="ekap-intro"><div><p class="eyebrow"><span class="small-line"></span> KAYNAK OTURUMU</p><h1>EKAP, <em>aynı oturumda.</em></h1><p class="intro-copy">Tarayıcıyı açın, doğrulamayı elle tamamlayın ve görünen ilanlarla ilerleyin.</p></div><span class="session-badge" id="session-badge">Kapalı</span></div>
+    <div id="ekap-error" class="ekap-error" role="alert" hidden></div>
+    <section class="session-controls" aria-label="EKAP oturum kontrolleri">
+      <div class="session-buttons"><button id="open-session" class="primary" type="button" disabled>EKAP oturumunu aç <span aria-hidden="true">↗</span></button><button id="close-session" class="secondary" type="button" disabled>Oturumu kapat</button><button id="go-search" class="text-button" type="button" disabled>Arama ekranına dön</button></div>
+      <div class="session-state"><span id="session-dot" aria-hidden="true"></span><p id="session-message" role="status">Oturum durumu alınıyor…</p></div>
+    </section>
+    <section class="browser-panel" aria-labelledby="browser-heading">
+      <div class="browser-toolbar"><h2 id="browser-heading">Canlı tarayıcı</h2><span>ekapv2.kik.gov.tr</span><span class="live-label" id="live-label" hidden><i aria-hidden="true"></i> CANLI</span></div>
+      <div class="browser-surface" id="browser-surface">
+        <div id="browser-placeholder" class="browser-placeholder"><span aria-hidden="true">↗</span><h3>EKAP oturumunuz burada görünecek.</h3><p>Başlamak için “EKAP oturumunu aç” düğmesine basın.</p></div>
+        <img id="browser-frame" alt="EKAP canlı tarayıcı görüntüsü. Kontrol etmek için tıklayın." tabindex="0" draggable="false" hidden>
+      </div>
+      <div class="browser-help"><p>Görüntüye tıklayarak, klavyeyi ve kaydırmayı kullanarak sayfayı kontrol edebilirsiniz. Doğrulamayı açılan Chrome penceresinde de tamamlayabilirsiniz.</p><span id="input-status" role="status"></span></div>
+    </section>
+    <section class="capture-panel" aria-labelledby="capture-heading">
+      <div><p class="eyebrow">GÖRÜNEN SONUÇLAR</p><h2 id="capture-heading">İlanları kontrol edin</h2><p class="capture-help">Sonuç listesi açılınca bu sayfadaki ilanları ön izleyebilir ve kaydedebilirsiniz. Bu işlem temel ilan bilgilerini alır; şartname veya ihale dosyası indirmez.</p></div>
+      <div class="capture-actions"><button class="secondary" id="preview-list" type="button" disabled>Listeyi ön izle</button><button class="primary" id="import-list" type="button" disabled>Görünen ilanları kaydet</button></div>
+      <p id="capture-result" class="capture-result" role="status">Henüz bir liste kaydedilmedi.</p>
+      <div id="capture-preview" hidden><p id="capture-count"></p><ul id="capture-items"></ul></div>
+    </section>
+    <p class="session-footnote">Oturum beş dakika hareketsiz kalırsa kapanır. Ekran görüntüleri ve yazdığınız tuşlar diske kaydedilmez.</p>
+  </main>
+  <footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>Kaynağı görün, aynı oturumdan ilerleyin.</span><a href="/ihale-listele-demo/">İhalelere dön ↗</a></footer>
+</body>
+</html>

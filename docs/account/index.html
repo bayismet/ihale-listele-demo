@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="İhale Listele üyeliğinize giriş yapın veya ücretsiz hesap oluşturun.">
+  <title>Üyelik · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-navigation">
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/account.css?v=20261029-membership">
+  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script><script src="/ihale-listele-demo/assets/header.js?v=20261030-navigation" defer></script>
+  <script src="/ihale-listele-demo/assets/account.js?v=20261029-membership" defer></script>
+</head>
+<body>
+  <site-header></site-header>
+  <main id="main" class="account-main">
+    <section class="account-panel" aria-labelledby="account-heading">
+      <p class="eyebrow"><span class="small-line"></span> İHALE LİSTELE ÜYELİĞİ</p>
+      <h1 id="account-heading">Fırsatları <em>takip edin.</em></h1>
+      <p class="intro-copy">Üye olun, hesabınız hemen kullanıma açılsın.</p>
+
+      <div id="account-alert" class="account-alert" role="status" aria-live="polite" hidden></div>
+      <div id="account-form-view">
+        <div class="account-tabs" role="group" aria-label="Hesap işlemi">
+          <button id="login-mode" class="account-tab active" type="button" aria-pressed="true">Giriş yap</button>
+          <button id="register-mode" class="account-tab" type="button" aria-pressed="false">Üye ol</button>
+        </div>
+        <form id="account-form">
+          <label for="display-name" id="display-name-label" hidden>Adınız (isteğe bağlı)</label>
+          <input id="display-name" name="display_name" type="text" maxlength="120" autocomplete="name" placeholder="Adınız" hidden>
+          <label for="email">E-posta adresi</label>
+          <input id="email" name="email" type="email" maxlength="320" autocomplete="email" required>
+          <label for="password">Parola</label>
+          <input id="password" name="password" type="password" minlength="12" maxlength="256" autocomplete="current-password" required>
+          <p id="password-help" class="account-help" hidden>En az 12 karakter kullanın.</p>
+          <button id="account-submit" class="primary account-submit" type="submit">Giriş yap <span aria-hidden="true">→</span></button>
+        </form>
+      </div>
+
+      <div id="signed-in-view" class="signed-in-view" hidden>
+        <p class="account-role" id="account-role"></p>
+        <h2 id="account-name"></h2>
+        <p id="account-email"></p>
+        <button id="logout-button" class="secondary" type="button">Güvenli çıkış yap</button>
+      </div>
+    </section>
+  </main>
+  <footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>İş fırsatlarına daha açık bir pencere.</span><a href="/ihale-listele-demo/">İhalelere dön ↗</a></footer>
+</body>
+</html>

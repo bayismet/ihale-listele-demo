@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bağlantı ayarları · İhale Listele</title>
+<script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script>
+<link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-demo"><link rel="stylesheet" href="/ihale-listele-demo/assets/personal.css">
+<script src="/ihale-listele-demo/assets/header.js?v=20261030-demo" defer></script><script src="/ihale-listele-demo/assets/connection.js" defer></script>
+<style>[data-requires-admin] main{visibility:hidden}</style></head><body data-requires-admin><site-header></site-header><main id="main" class="personal-page">
+<p class="eyebrow">YÖNETİCİ</p><h1>Bağlantı ayarları</h1>
+<p class="intro-copy">Web sitesi Mac'inizdeki API'ye bağlanır. Veritabanı ve yerel model Mac'te çalışır.</p>
+<section class="personal-card"><form id="connection-form" style="width:100%;max-width:640px">
+<h2>API bağlantısı</h2><label for="api-url">API adresi</label>
+<input id="api-url" type="url" required placeholder="https://….trycloudflare.com" style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:10px 0 16px">
+<p id="connection-note">Adres bu tarayıcı için kaydedilir. Adres değiştiğinde yeniden giriş yapmanız gerekir.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><button id="test-connection" type="button">Bağlantıyı test et</button><button id="save-connection" class="primary" type="submit">Adresi kaydet</button></div>
+<p id="connection-result" role="status" aria-live="polite"></p></form></section>
+<section class="personal-card" style="margin-top:16px"><div><h2>Yerel model</h2><p id="model-status">Kontrol ediliyor…</p><p>LLM işlemleri API üzerinden Mac'te yürütülür.</p></div></section>
+</main></body></html>

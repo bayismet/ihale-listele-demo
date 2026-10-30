@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EKAP dosyaları · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261030-navigation">
+  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script><script src="/ihale-listele-demo/assets/header.js?v=20261030-navigation" defer></script>
+  <script src="/ihale-listele-demo/assets/documents.js" type="module"></script>
+<style>[data-requires-admin] main{visibility:hidden}</style></head>
+<body data-requires-admin>
+  <site-header></site-header>
+  <main id="main">
+    <a class="back-link" href="/ihale-listele-demo/">← İhalelere dön</a>
+    <section class="detail-panel">
+      <p class="eyebrow">YEREL ÇALIŞMA ALANINIZ</p>
+      <h1>EKAP dosyaları</h1>
+      <p>İndirdiğiniz paketleri topluca ekleyin. İhale dokümanı ile teknik şartname ayrılır ve ilgili ihale sayfasından indirilebilir.</p>
+      <div class="tender-documents">
+        <h2>Günlük otomatik aktarım</h2>
+        <p>Chrome'da İndirilenler klasörünüzü bir kez seçin. Bu ekran açıkken eklentinin ilan raporu ve yeni EKAP paketleri kendiliğinden alınır. EKAP sekmesinde yalnızca insan doğrulamasını tamamlarsınız.</p>
+        <button id="watch-folder" class="primary" type="button">İndirme klasörünü bağla</button>
+        <button id="stop-watch" type="button" hidden>Aktarımı durdur</button>
+        <p id="watch-status" role="status" aria-live="polite">Yalnızca EKAP paketleri ve eklentinin kendi ilan raporu okunur. Diğer dosyalarınızın içeriği okunmaz.</p>
+      </div>
+      <h2>Elle toplu aktarım</h2>
+      <form id="document-import">
+        <p><label for="capture-file">1. Eklentiden kaydettiğiniz ilan raporu (JSON, isteğe bağlı)</label><br><input id="capture-file" type="file" accept=".json,application/json"></p>
+        <p><label for="package-files">2. İndirdiğiniz güncel ihale paketleri (birden fazla ZIP seçebilirsiniz)</label><br><input id="package-files" type="file" accept=".zip,application/zip" multiple></p>
+        <button id="import-button" class="primary" type="submit">Dosyaları içe aktar ↓</button>
+      </form>
+      <p id="import-status" role="status" aria-live="polite"></p>
+      <ul id="import-log" aria-label="Aktarım sonuçları"></ul>
+      <p class="source-explanation">Dosyalar uygulama sunucusunda saklanır. Aynı içerik yeniden eklenmez; önceki dosyalar korunur. Bu ekran yalnızca yöneticilere açıktır; üyeler ihale sayfasından dosyaları indirebilir.</p>
+    </section>
+    <section class="detail-panel"><h2>Dosyası bulunan ihaleler</h2><p id="documents-empty">Yükleniyor…</p><ul id="document-tenders" class="document-list"></ul></section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>İhale İlanı Gönder · İhale Listele</title>
+  <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=20261029-shared-header">
+  <script src="/ihale-listele-demo/assets/app-config.js"></script><script src="/ihale-listele-demo/assets/client.js"></script>
+  <script src="/ihale-listele-demo/assets/header.js?v=20261029-admin-gate" defer></script>
+  <style>
+    .submission-main { max-width: 760px; padding-top: 48px; padding-bottom: 64px; }
+    .submission-panel { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 32px; }
+    label { display: block; margin-top: 1rem; font-weight: 600; }
+    input, textarea { width: 100%; padding: .5rem; box-sizing: border-box; }
+    .warranty { border: 1px solid var(--line); padding: 1rem; margin-top: 1rem; border-radius: 5px; }
+    .warranty input { width: auto; }
+    .result { margin-top: 1.5rem; padding: 1rem; background: var(--pale); white-space: pre-wrap; border-radius: 5px; }
+    .error { background: #fbefeb; color: #8b3c28; }
+    @media(max-width:580px) { .submission-main { padding: 30px 18px 48px; } .submission-panel { padding: 22px; } }
+  </style>
+</head>
+<body>
+  <site-header></site-header>
+  <main id="main" class="submission-main">
+  <section class="submission-panel">
+  <p class="eyebrow"><span class="small-line"></span> TOPLULUKTAN GELEN İLANLAR</p>
+  <h1>İhale ilanı <em>gönderin.</em></h1>
+  <p>İlanınız yayımlanmadan önce yönetici incelemesinden geçer. Onaylandığında
+  ilan, kaynak gösterilerek abonelere sunulur.</p>
+  <form id="submission-form">
+    <label for="company_name">Firma / kurum adı</label>
+    <input id="company_name" name="company_name" required maxlength="300">
+
+    <label for="contact_email">İletişim e-postası</label>
+    <input id="contact_email" name="contact_email" type="email" required maxlength="320">
+
+    <label for="title">İlan başlığı</label>
+    <input id="title" name="title" required maxlength="500">
+
+    <label for="city">Şehir</label>
+    <input id="city" name="city" maxlength="120">
+
+    <label for="category">Kategori</label>
+    <input id="category" name="category" maxlength="120">
+
+    <label for="deadline">Son başvuru tarihi</label>
+    <input id="deadline" name="deadline" type="date">
+
+    <label for="source_url">İlanın yayımlandığı adres (varsa)</label>
+    <input id="source_url" name="source_url" type="url" maxlength="1000">
+
+    <div class="warranty">
+      <label for="warranty_accepted">
+        <input id="warranty_accepted" name="warranty_accepted" type="checkbox" required
+               style="width: auto;">
+        Bu ihale ilanını yayımlama hakkına sahip olduğumu; ilanın başlık, kurum, şehir, kategori ve son başvuru tarihi bilgilerinin İhale Listele tarafından saklanmasına, sınıflandırılmasına, yerel dil modeliyle işlenmesine ve abonelere gösterilmesine yetkili olduğumu beyan ederim. İlanda üçüncü kişilere ait izinsiz içerik bulunmadığını kabul ederim.
+      </label>
+    </div>
+
+    <p><button type="submit">Gönder</button></p>
+  </form>
+  <div id="result" class="result" hidden></div>
+  </section>
+  </main>
+  <script>
+    const form = document.getElementById("submission-form");
+    const result = document.getElementById("result");
+    const optional = (id) => document.getElementById(id).value || null;
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = {
+        company_name: document.getElementById("company_name").value,
+        contact_email: document.getElementById("contact_email").value,
+        title: document.getElementById("title").value,
+        city: optional("city"),
+        category: optional("category"),
+        deadline: optional("deadline"),
+        source_url: optional("source_url"),
+        warranty_accepted: document.getElementById("warranty_accepted").checked,
+      };
+      result.hidden = false;
+      result.className = "result";
+      result.textContent = "Gönderiliyor...";
+      try {
+        const response = await IhaleApp.fetch("/submissions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const body = await response.json();
+        if (!response.ok) {
+          result.className = "result error";
+          result.textContent = "Gönderilemedi: " + JSON.stringify(body.detail);
+          return;
+        }
+        result.textContent =
+          "Başvuru alındı.\n\nBaşvuru no: " + body.id +
+          "\nYönetim anahtarı: " + body.management_token +
+          "\n\nBu anahtarı saklayın; ilanı düzenlemek veya geri çekmek için gereklidir.";
+        form.reset();
+      } catch (error) {
+        result.className = "result error";
+        result.textContent = "Gönderilemedi: " + String(error);
+      }
+    });
+  </script>
+</body>
+</html>
