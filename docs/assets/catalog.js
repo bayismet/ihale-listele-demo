@@ -268,11 +268,6 @@ async function loadDocuments(id, panel) {
       list.append(li);
     }
     section.append(list);
-    if (account.user.role === "admin") {
-      const manage = node("a", "Dosya ekle / toplu aktarım ↗");
-      manage.href = IhaleApp.href("/documents");
-      section.append(manage);
-    }
   } catch (_) { section.append(node("p", "Dosya listesi şu anda yüklenemiyor.")); }
 }
 form.addEventListener("submit", event => {event.preventDefault(); activePage = 1; loadResults(true);});

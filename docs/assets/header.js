@@ -3,7 +3,7 @@
 const navigation = [
   { href: "/", label: "Ana sayfa" },
   { href: "/tenders", label: "İhaleler" },
-  { href: "/sources/bik", label: "Veri aktarımları", adminOnly: true, sources: true },
+  { href: "/sources/ekap/bulletins", label: "Veri aktarımları", adminOnly: true, sources: true },
   { href: "/admin/llm", label: "LLM çağrıları", adminOnly: true },
   { href: "/admin/connection", label: "Bağlantı", adminOnly: true },
   { href: "/favorites", label: "Favorilerim", memberOnly: true },
@@ -72,7 +72,7 @@ class SiteHeader extends HTMLElement {
         link.append(" ", arrow);
       }
       if (currentPath === item.href || (item.sources &&
-          ["/sources/bik", "/sources/ekap", "/sources/ekap/bulletins", "/documents"].includes(currentPath))) {
+          ["/sources/bik", "/sources/ekap/bulletins"].includes(currentPath))) {
         link.classList.add("nav-active");
         link.setAttribute("aria-current", "page");
       }
@@ -90,10 +90,8 @@ class SiteHeader extends HTMLElement {
 
   showSourceTabs(currentPath) {
     const tabs = [
-      { href: "/sources/bik", label: "BİK aktarımı" },
       { href: "/sources/ekap/bulletins", label: "EKAP bültenleri" },
-      { href: "/sources/ekap", label: "EKAP oturumu" },
-      { href: "/documents", label: "EKAP dosyaları" },
+      { href: "/sources/bik", label: "BİK aktarımı" },
     ];
     if (!tabs.some(item => item.href === currentPath)) return;
     const main = document.querySelector("main");
