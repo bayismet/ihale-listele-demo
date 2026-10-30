@@ -4,17 +4,28 @@ if (!allowed) return;
 "use strict";
 const el = id => document.getElementById(id);
 let busy = false, requestPending = false;
+let currentCounts = {sector: 0, city: 0, city_retry: 0};
 const labels = {running:"Çalışıyor",stopping:"Durduruluyor",completed:"Tamamlandı",stopped:"Durduruldu",interrupted:"Yeniden başlatma sırasında kesildi",failed:"İşlem başarısız"};
+const skipLabels = {uncertain:"Yeterli bilgi yok veya model emin değil",unsupported_evidence:"Modelin kanıtı iş/teslim yeri metninde bulunamadı",multiple_provinces:"Birden fazla il belirtilmiş",conflicting_province:"Modelin seçtiği il kaynak metniyle çelişiyor",record_changed:"Kayıt veya işleme koşulları değişti"};
 function error(text) { el("llm-error").textContent = text; el("llm-error").hidden = !text; }
+function updateButtons() {
+  el("sector-start").disabled = busy || requestPending || !currentCounts.sector;
+  const cityTotal = currentCounts.city + (el("city-retry").checked ? currentCounts.city_retry : 0);
+  el("city-start").disabled = busy || requestPending || !cityTotal;
+  el("city-retry").disabled = busy || requestPending;
+}
 async function refresh() {
   try {
     const response = await IhaleApp.fetch("/api/local/llm/status", {cache:"no-store"});
     if (!response.ok) throw new Error(response.status === 401 || response.status === 403 ? "Yönetici hesabıyla giriş yapmalısınız." : "İşlem durumu alınamadı.");
     const data = await response.json();
+    currentCounts = {...data.counts, city_retry: data.counts.city_retry || 0};
     el("sector-count").textContent = data.counts.sector;
     el("city-count").textContent = data.counts.city;
+    el("city-retry-count").textContent = currentCounts.city_retry;
+    el("city-retry-note").hidden = !currentCounts.city_retry;
     busy = data.job && ["running", "stopping"].includes(data.job.status);
-    for (const kind of ["sector", "city"]) el(`${kind}-start`).disabled = busy || requestPending || !data.counts[kind];
+    updateButtons();
     el("job-stop").hidden = !busy;
     const job = data.job;
     el("job-status").textContent = job ? `${job.kind === "city" ? "Şehir" : "Sektör"} · ${labels[job.status] || job.status}` : "Henüz işlem başlatılmadı.";
@@ -31,8 +42,15 @@ async function refresh() {
       const minutes = Math.ceil(seconds / 60);
       el("job-remaining").textContent = seconds < 60 ? "Tahmini kalan süre: 1 dakikadan az" : `Tahmini kalan süre: ${minutes.toLocaleString("tr-TR")} dakika`;
     } else {
-      el("job-remaining").textContent = busy ? "İlk kayıt işleniyor; kalan süre hesaplanıyor…" : job ? "İşlenen kayıtlar kaydedildi." : "İşlem başladığında ilerleme burada görünecek.";
+      el("job-remaining").textContent = busy ? "İlk kayıt işleniyor; kalan süre hesaplanıyor…" : job ? `${job.saved || 0} kayıt güncellendi. İlerleme yüzdesi, incelenen kayıtları gösterir.` : "İşlem başladığında ilerleme burada görünecek.";
     }
+    const reasons = Object.entries(job?.skip_reasons || {});
+    el("job-skip-reasons").replaceChildren(...reasons.map(([reason, count]) => {
+      const item = document.createElement("li");
+      item.textContent = `${count} kayıt: ${skipLabels[reason] || "Diğer nedenler"}`;
+      return item;
+    }));
+    el("job-skip-reasons").hidden = !reasons.length;
     if (job) {
       el("job-counts").textContent = `${job.done}/${job.total} işlendi · ${job.saved} kaydedildi · ${job.skipped} atlandı · ${job.failed} hata · ${job.seconds_per_record} sn/kayıt`;
       el("job-note").textContent = job.message || "";
@@ -54,8 +72,9 @@ async function command(action, payload) {
 for (const kind of ["sector", "city"]) el(`${kind}-start`).addEventListener("click", () => {
   const input = el("batch-limit");
   if (!input.reportValidity() || !Number.isInteger(Number(input.value))) return;
-  command("start", {kind,limit:Number(input.value)});
+  command("start", {kind,limit:Number(input.value),retry_skipped:kind === "city" && el("city-retry").checked});
 });
+el("city-retry").addEventListener("change", updateButtons);
 el("job-stop").addEventListener("click", () => command("stop"));
 refresh();
 setInterval(refresh, 2500);
