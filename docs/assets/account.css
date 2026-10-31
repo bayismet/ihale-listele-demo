@@ -5,8 +5,9 @@
 .account-tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin:0 0 23px}
 .account-tab{background:none;border:0;border-bottom:2px solid transparent;padding:0 0 12px;color:var(--muted);font-size:13px;font-weight:600}
 .account-tab.active{border-color:var(--green);color:var(--green)}
-#account-form label{display:block;font-size:12px;font-weight:650;margin:17px 0 7px}
-#account-form input{width:100%;height:47px;border:1px solid var(--line);border-radius:5px;padding:0 13px;color:var(--ink);background:#fff}
+#account-form label,#forgot-password-form label{display:block;font-size:12px;font-weight:650;margin:17px 0 7px}
+#account-form input,#forgot-password-form input{width:100%;height:47px;border:1px solid var(--line);border-radius:5px;padding:0 13px;color:var(--ink);background:#fff}
+.forgot-password-link{text-align:right;font-size:12px;margin:12px 0 0}.forgot-password-link a,.back-to-login a{color:var(--green);text-decoration:underline;text-underline-offset:4px}.back-to-login{font-size:13px;margin:22px 0 0}.password-reset-note{padding:14px 16px;background:var(--pale);border:1px solid var(--line);border-radius:6px;color:var(--muted);font-size:13px;line-height:1.8}
 .account-help{font-size:11px;color:var(--muted);margin:7px 0 0}
 .account-submit{width:100%;margin-top:25px;display:flex;justify-content:space-between;align-items:center}
 .account-alert{padding:13px 15px;margin:0 0 20px;border-radius:5px;background:var(--pale);font-size:13px}

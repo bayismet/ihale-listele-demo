@@ -1,7 +1,8 @@
 "use strict";
 
 const $ = id => document.getElementById(id);
-let mode = new URLSearchParams(location.search).get("mode") === "register" ? "register" : "login";
+const requestedMode = new URLSearchParams(location.search).get("mode");
+let mode = ["register", "forgot"].includes(requestedMode) ? requestedMode : "login";
 const nextPath = new URLSearchParams(location.search).get("next");
 const safeNextPath = nextPath && nextPath.startsWith("/") && !nextPath.startsWith("//") && !nextPath.includes("\\")
   ? nextPath : null;
@@ -16,9 +17,20 @@ function alertMessage(text, error = false) {
 function setMode(nextMode) {
   mode = nextMode;
   const registering = mode === "register";
-  $("login-mode").classList.toggle("active", !registering);
+  const forgot = mode === "forgot";
+  $("account-form-view").hidden = forgot;
+  $("forgot-password-view").hidden = !forgot;
+  $("forgot-password-link-wrap").hidden = registering;
+  const emphasis = document.createElement("em");
+  emphasis.textContent = forgot ? "yenileyin." : "takip edin.";
+  $("account-heading").replaceChildren(forgot ? "Şifrenizi " : "Fırsatları ", emphasis);
+  $("account-intro").textContent = forgot
+    ? "Hesabınıza yeniden erişmek için şifre yenileme adımı."
+    : "Üye olun, hesabınız hemen kullanıma açılsın.";
+  document.title = forgot ? "Şifremi unuttum · İhale Listele" : "Üyelik · İhale Listele";
+  $("login-mode").classList.toggle("active", mode === "login");
   $("register-mode").classList.toggle("active", registering);
-  $("login-mode").setAttribute("aria-pressed", String(!registering));
+  $("login-mode").setAttribute("aria-pressed", String(mode === "login"));
   $("register-mode").setAttribute("aria-pressed", String(registering));
   $("display-name-label").hidden = !registering;
   $("display-name").hidden = !registering;
@@ -34,7 +46,9 @@ function setMode(nextMode) {
 }
 
 function showAccount(user) {
+  if (mode === "forgot") setMode("login");
   $("account-form-view").hidden = true;
+  $("forgot-password-view").hidden = true;
   $("signed-in-view").hidden = false;
   $("account-role").textContent = user.role === "admin" ? "YÖNETİCİ" : "AKTİF ÜYE";
   $("account-name").textContent = user.display_name || "Hesabınız hazır.";
@@ -47,8 +61,32 @@ async function getCurrentUser() {
   return (await response.json()).user;
 }
 
-$("login-mode").addEventListener("click", () => setMode("login"));
-$("register-mode").addEventListener("click", () => setMode("register"));
+function navigateMode(nextMode) {
+  const url = new URL(location.href);
+  if (nextMode === "login") url.searchParams.delete("mode");
+  else url.searchParams.set("mode", nextMode);
+  history.replaceState(null, "", url);
+  setMode(nextMode);
+  (nextMode === "forgot" ? $("reset-email") : $("email")).focus();
+}
+$("login-mode").addEventListener("click", () => navigateMode("login"));
+$("register-mode").addEventListener("click", () => navigateMode("register"));
+$("forgot-password-link").addEventListener("click", event => {
+  event.preventDefault();
+  $("reset-email").value = $("email").value.trim();
+  $("password").value = "";
+  navigateMode("forgot");
+});
+$("back-to-login").addEventListener("click", event => {
+  event.preventDefault();
+  $("email").value = $("reset-email").value.trim();
+  navigateMode("login");
+});
+$("forgot-password-form").addEventListener("submit", event => {
+  event.preventDefault();
+  // UI only until a verified email delivery and reset-token flow is available.
+  $("password-reset-note").textContent = "E-posta ile şifre sıfırlama henüz kullanıma açılmadı. Sıfırlama bağlantısı gönderilmedi; şifrenizi değiştirmek için yöneticinizle iletişime geçin.";
+});
 
 $("account-form").addEventListener("submit", async event => {
   event.preventDefault();
