@@ -96,6 +96,9 @@ function card(item) {
   top.append(node("span", item.source_name, "source-tag"));
   if (item.procurement_type) top.append(node("span",procurementLabels[item.procurement_type] || item.procurement_type,"source-tag"));
   if (item.purchase_type) top.append(node("span",purchaseLabels[item.purchase_type] || item.purchase_type,"source-tag"));
+  if (item.procurement_type === "direct_procurement" && item.electronic_price_offer === true) {
+    top.append(node("span", "E-fiyat teklifi var", "eprice-badge"));
+  }
   top.append(node("span", activityLabel(item.activity_status), `activity-badge activity-${item.activity_status}`));
   if (item.registration_number || item.external_id) top.append(node("span", item.registration_number ? `İKN ${item.registration_number}` : `Kayıt ${item.external_id}`, "reference"));
   link.append(top);

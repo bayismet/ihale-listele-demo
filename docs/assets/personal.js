@@ -47,6 +47,9 @@ function renderFavorites() {
     link.href = IhaleApp.href(`/tenders/${encodeURIComponent(item.id)}`);
     link.append(el("span", ({active:"Aktif",inactive:"Pasif",unknown:"Durumu belirsiz"})[item.activity_status] || "Durumu belirsiz", `activity-badge activity-${item.activity_status}`));
     link.append(el("span", item.source_name, "source-tag"), el("h2", item.title), el("p", item.buyer || "Kurum belirtilmemiş"));
+    if (item.procurement_type === "direct_procurement" && item.electronic_price_offer === true) {
+      link.insertBefore(el("span", "E-fiyat teklifi var", "eprice-badge"), link.querySelector("h2"));
+    }
     const meta = [item.registration_number ? `İKN ${item.registration_number}` : "", item.city || "", item.deadline ? `Son teklif: ${dateLabel(item.deadline)}` : "Son teklif tarihi belirtilmemiş"].filter(Boolean).join(" · ");
     link.append(el("p", meta, "personal-meta"));
     const button = el("button", "Favorilerden çıkar", "favorite-remove");
