@@ -85,7 +85,7 @@ class SiteHeader extends HTMLElement {
       }
       if (item.account) link.dataset.accountLink = "true";
       if (currentPath === item.href || (item.href === "/admin/llm" && currentPath.startsWith("/admin/llm/")) || (item.sources &&
-          ["/sources/bik", "/sources/ekap/bulletins"].includes(currentPath))) {
+          ["/sources/bik", "/sources/ekap/bulletins", "/sources/ekap/direct-procurements"].includes(currentPath))) {
         link.classList.add("nav-active");
         link.setAttribute("aria-current", "page");
       }
@@ -106,6 +106,7 @@ class SiteHeader extends HTMLElement {
   showSourceTabs(currentPath) {
     const tabs = [
       { href: "/sources/ekap/bulletins", label: "EKAP bültenleri" },
+      { href: "/sources/ekap/direct-procurements", label: "Doğrudan teminler" },
       { href: "/sources/bik", label: "BİK aktarımı" },
     ];
     if (!tabs.some(item => item.href === currentPath)) return;
