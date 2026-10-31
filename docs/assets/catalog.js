@@ -203,6 +203,30 @@ async function initDetail(id) {
       facts.append(pair);
     }
     panel.append(facts);
+    if (item.latest_notice_kind) {
+      const labels = {result:"Sonuç ilanı",cancellation:"İptal ilanı",correction:"Düzeltme ilanı",amendment:"Değişiklik ilanı"};
+      panel.append(node("p", `Son resmî bildirim: ${labels[item.latest_notice_kind] || item.latest_notice_kind} · ${dateLabel(item.latest_notice_at)}`, "source-explanation"));
+    }
+    if (item.latest_notice_kind === "cancellation" && item.awards?.length) {
+      panel.append(node("p", "İptal ilanı da bulunuyor. Aşağıdaki bilgiler daha önce yayımlanmış sözleşme sonuçlarıdır; güncel durumu kaynaktan kontrol edin.", "source-explanation"));
+    }
+    if (item.awards?.length) {
+      const awards = node("section", null, "award-results");
+      awards.append(node("h2", "İhale sonuçları"), node("p", "Sonuç bültenlerinde açıklanan yüklenici ve sözleşme bedelleri. Aynı ihale için birden fazla sözleşme bulunabilir.", "source-explanation"));
+      for (const award of item.awards) {
+        const entry = node("article", null, "award-card");
+        const [whole, fraction = ""] = award.amount.split(".");
+        const price = `${new Intl.NumberFormat("tr-TR").format(BigInt(whole))},${fraction.replace(/0+$/,"").padEnd(2,"0")} ${award.currency === "TRY" ? "TL" : award.currency}`;
+        entry.append(node("h3", award.winner), node("p", price, "award-price"));
+        entry.append(node("p", `Sözleşme tarihi: ${dateLabel(award.contract_date)} · Sonuç ilanı: ${dateLabel(award.published_at)}`, "source-explanation"));
+        entry.append(node("p", `${award.bulletin_file} · Sonuç ilanı ${award.notice_number}`, "source-explanation"));
+        awards.append(entry);
+      }
+      panel.append(awards);
+    } else if (item.activity_status === "inactive") {
+      panel.append(node("p", "Bu kayıt için doğrulanmış yüklenici ve sözleşme bedeli bilgisi henüz bulunmuyor. Pasif ihaleler iptal edilmiş veya yalnızca teklif süresi dolmuş da olabilir.", "source-explanation"));
+    }
+
     if (item.source_url) {
       const sourceLabel = item.source_url.includes("/ekap/search/")
         ? "EKAP ihale ilanını aç ↗"

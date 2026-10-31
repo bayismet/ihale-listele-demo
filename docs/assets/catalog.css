@@ -17,3 +17,5 @@ site-header{display:block}
 .activity-badge{display:inline-block;border-radius:4px;padding:3px 7px;font-size:10px;font-weight:650;white-space:nowrap}.activity-active{color:#245f49;background:#e9f0e6}.activity-inactive{color:#725e55;background:#f1eae6}.activity-unknown{color:#716529;background:#f5f0d9}.card-top{flex-wrap:wrap}
 .personal-page .source-tabs{margin-top:0;margin-bottom:28px}
 [data-requires-member] main{visibility:hidden}
+
+.award-results{margin:25px 0;padding-top:20px;border-top:1px solid var(--line)}.award-results h2{font-family:Georgia,serif;font-size:24px;margin-bottom:12px}.award-card{border:1px solid var(--line);background:var(--pale);border-radius:7px;padding:18px;margin:14px 0;overflow-wrap:anywhere}.award-card h3{font-size:15px;line-height:1.6;margin:0 0 8px}.award-price{font-size:23px;font-weight:650;color:var(--green);margin:0 0 8px}
