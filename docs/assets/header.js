@@ -63,7 +63,7 @@ class SiteHeader extends HTMLElement {
         link.hidden = true;
       }
       if (item.account) link.dataset.accountLink = "true";
-      if (currentPath === item.href || (item.sources &&
+      if (currentPath === item.href || (item.href === "/admin/llm" && currentPath.startsWith("/admin/llm/")) || (item.sources &&
           ["/sources/bik", "/sources/ekap/bulletins"].includes(currentPath))) {
         link.classList.add("nav-active");
         link.setAttribute("aria-current", "page");
@@ -75,6 +75,7 @@ class SiteHeader extends HTMLElement {
     header.append(inner);
     this.replaceChildren(skip, header);
     this.showSourceTabs(currentPath);
+    this.showLLMTabs(currentPath);
     this.showAdminLinks();
     this.showAccountLink();
     window.addEventListener("ihale-account-changed", () => { this.showAdminLinks(); this.showAccountLink(); });
@@ -91,6 +92,27 @@ class SiteHeader extends HTMLElement {
     const nav = document.createElement("nav");
     nav.className = "source-tabs";
     nav.setAttribute("aria-label", "Veri aktarım ekranları");
+    for (const item of tabs) {
+      const link = document.createElement("a");
+      link.href = IhaleApp.href(item.href);
+      link.textContent = item.label;
+      if (item.href === currentPath) link.setAttribute("aria-current", "page");
+      nav.append(link);
+    }
+    main.prepend(nav);
+  }
+
+  showLLMTabs(currentPath) {
+    const tabs = [
+      {href:"/admin/llm", label:"LLM işlemleri"},
+      {href:"/admin/llm/reviews", label:"Eksik bilgileri incele"},
+    ];
+    if (!tabs.some(item => item.href === currentPath)) return;
+    const main = document.querySelector("main");
+    if (!main) return;
+    const nav = document.createElement("nav");
+    nav.className = "source-tabs";
+    nav.setAttribute("aria-label", "LLM çağrıları ekranları");
     for (const item of tabs) {
       const link = document.createElement("a");
       link.href = IhaleApp.href(item.href);

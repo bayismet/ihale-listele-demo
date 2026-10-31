@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eksik bilgileri incele · İhale Listele</title>
+<link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=f69f216de057">
+<link rel="stylesheet" href="/ihale-listele-demo/assets/review.css?v=c1ea1bce3090"><link rel="stylesheet" href="/ihale-listele-demo/assets/llm-review.css?v=1814b6e4f67a">
+<script src="/ihale-listele-demo/assets/app-config.js?v=c3beafa771b5"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script>
+<script src="/ihale-listele-demo/assets/header.js?v=71a3164adb43" defer></script>
+<script src="/ihale-listele-demo/assets/llm-review.js?v=512d55d0c7d5" defer></script>
+<style>[data-requires-admin] main{visibility:hidden}</style></head>
+<body data-requires-admin>
+<site-header></site-header>
+<main id="main" class="review-main">
+<div class="review-intro"><div><p class="eyebrow">LLM ÇAĞRILARI · ELLE İNCELEME</p><h1>Eksik bilgileri <em>tamamlayın.</em></h1><p class="intro-copy">Modelin sonuçlandıramadığı şehir ve sektörleri, kaynak bilgilerini inceleyerek kaydedin.</p></div><div class="pending-summary"><strong id="queue-total">—</strong><span>filtreye uygun ihale</span></div></div>
+<p id="review-notice" class="review-notice" role="status" hidden></p><p id="review-error" class="review-error" role="alert" hidden></p>
+<form id="review-filters" class="review-filters" role="search">
+<div class="review-search"><label for="review-query">İhale, kurum veya İKN</label><input type="search" id="review-query" maxlength="200" placeholder="İncelenecek kaydı bulun"></div>
+<div><label for="review-field">İncelenecek alan</label><select id="review-field"><option value="all">Şehir ve sektör</option><option value="city">Şehir</option><option value="sector">Sektör</option></select></div>
+<div><label for="review-activity">İhale durumu</label><select id="review-activity"><option value="active">Aktif</option><option value="inactive">Pasif</option><option value="unknown">Belirsiz</option><option value="all">Tümü</option></select></div>
+<div><label for="review-source">Kaynak</label><select id="review-source"><option value="">Tüm kaynaklar</option></select></div>
+<button class="primary" type="submit">Ara</button><button id="review-reload" type="button" class="text-button">Yenile ↻</button>
+</form>
+<div class="review-layout llm-review-layout">
+<section class="review-list-panel" aria-label="İnceleme kuyruğu">
+<p class="queue-help">Bir satırı açın, bilgileri kontrol edin ve sıradaki kayda geçin. Kaydetmeden geçilen kayıt kuyrukta kalır.</p>
+<div id="review-list" aria-live="polite"></div>
+<nav id="review-pagination" class="pagination" aria-label="İnceleme sayfaları" hidden><button id="page-prev" type="button">← Önceki</button><span id="page-label"></span><button id="page-next" type="button">Sonraki →</button></nav>
+</section>
+<section id="review-detail" class="review-detail" aria-label="İhale bilgileri"><div class="message">İncelemek için bir ihale seçin.</div></section>
+</div>
+</main>
+<footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>Bilgiyi kaynağıyla birlikte değerlendirin.</span><a href="/ihale-listele-demo/admin/llm">LLM çağrılarına dön ↗</a></footer>
+</body></html>
