@@ -12,6 +12,11 @@ function updateButtons() {
   el("sector-start").disabled = busy || requestPending || !currentCounts.sector;
   const cityTotal = currentCounts.city + (el("city-retry").checked ? currentCounts.city_retry : 0);
   el("city-start").disabled = busy || requestPending || !cityTotal;
+  const total = (currentCounts.combined || 0) + (el("city-retry").checked ? currentCounts.combined_retry || 0 : 0);
+  const both = (el("city-retry").checked ? currentCounts.combined_both_retry : currentCounts.combined_both) || 0;
+  el("combined-count").textContent = total.toLocaleString("tr-TR");
+  el("combined-overlap").textContent = `${both.toLocaleString("tr-TR")} kayıtta iki alan birlikte, kalan ${(total - both).toLocaleString("tr-TR")} kayıtta yalnızca eksik alan işlenir.`;
+  el("combined-start").disabled = busy || requestPending || !total;
   el("city-retry").disabled = busy || requestPending;
 }
 async function refresh() {
@@ -28,7 +33,7 @@ async function refresh() {
     updateButtons();
     el("job-stop").hidden = !busy;
     const job = data.job;
-    el("job-status").textContent = job ? `${job.kind === "city" ? "Şehir" : job.kind === "sector_migration" ? "Kategori geçişi" : "Kategori"} · ${labels[job.status] || job.status}` : "Henüz işlem başlatılmadı.";
+    el("job-status").textContent = job ? `${job.kind === "combined" ? "Şehir ve kategori" : job.kind === "city" ? "Şehir" : job.kind === "sector_migration" ? "Kategori geçişi" : "Kategori"} · ${labels[job.status] || job.status}` : "Henüz işlem başlatılmadı.";
     const total = Math.max(0, Number(job?.total) || 0);
     const done = Math.min(total, Math.max(0, Number(job?.done) || 0));
     const percent = total ? Math.floor(done / total * 100) : job?.status === "completed" ? 100 : 0;
@@ -44,6 +49,11 @@ async function refresh() {
     } else {
       el("job-remaining").textContent = busy ? "İlk kayıt işleniyor; kalan süre hesaplanıyor…" : job ? `${job.saved || 0} kayıt güncellendi. İlerleme yüzdesi, incelenen kayıtları gösterir.` : "İşlem başladığında ilerleme burada görünecek.";
     }
+    el("job-field-counts").hidden = job?.kind !== "combined";
+    if (job?.kind === "combined") {
+      const saved = job.fields_saved || {}, skipped = job.fields_skipped || {}, failed = job.fields_failed || {};
+      el("job-field-counts").textContent = `Kategori: ${saved.sector || 0} kaydedildi, ${skipped.sector || 0} atlandı, ${failed.sector || 0} hata · Şehir: ${saved.city || 0} kaydedildi, ${skipped.city || 0} atlandı, ${failed.city || 0} hata · ${job.llm_calls || 0} model çağrısı (${job.combined_calls || 0} birleşik). Kaydedilen kayıt sayısı, en az bir alanı güncellenen ihaleleri gösterir.`;
+    }
     const reasons = Object.entries(job?.skip_reasons || {});
     el("job-skip-reasons").replaceChildren(...reasons.map(([reason, count]) => {
       const item = document.createElement("li");
@@ -55,11 +65,11 @@ async function refresh() {
       el("job-counts").textContent = `${job.done}/${job.total} işlendi · ${job.saved} kaydedildi · ${job.skipped} atlandı · ${job.failed} hata · ${job.seconds_per_record} sn/kayıt`;
       el("job-note").textContent = job.message || "";
     }
-  } catch (err) { error(err.message); for (const kind of ["sector", "city"]) el(`${kind}-start`).disabled = true; }
+  } catch (err) { error(err.message); for (const kind of ["sector", "city", "combined"]) el(`${kind}-start`).disabled = true; }
 }
 async function command(action, payload) {
   requestPending = true;
-  el("sector-start").disabled = el("city-start").disabled = true;
+  el("sector-start").disabled = el("city-start").disabled = el("combined-start").disabled = true;
   error("");
   try {
     const response = await IhaleApp.fetch(`/api/local/llm/${action}`, {method:"POST",headers:{"Content-Type":"application/json","X-Requested-With":"IhaleListele"},body:payload ? JSON.stringify(payload) : undefined});
@@ -69,10 +79,10 @@ async function command(action, payload) {
   } catch (err) { error(err.message); }
   finally { requestPending = false; await refresh(); }
 }
-for (const kind of ["sector", "city"]) el(`${kind}-start`).addEventListener("click", () => {
+for (const kind of ["sector", "city", "combined"]) el(`${kind}-start`).addEventListener("click", () => {
   const input = el("batch-limit");
   if (!input.reportValidity() || !Number.isInteger(Number(input.value))) return;
-  command("start", {kind,limit:Number(input.value),retry_skipped:kind === "city" && el("city-retry").checked});
+  command("start", {kind,limit:Number(input.value),retry_skipped:["city", "combined"].includes(kind) && el("city-retry").checked});
 });
 el("city-retry").addEventListener("change", updateButtons);
 el("job-stop").addEventListener("click", () => command("stop"));
