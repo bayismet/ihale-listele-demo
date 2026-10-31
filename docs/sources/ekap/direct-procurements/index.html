@@ -2,7 +2,7 @@
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Doğrudan teminler · İhale Listele</title>
 <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=cf4f405fc8c2"><link rel="stylesheet" href="/ihale-listele-demo/assets/personal.css?v=9968383b9ba5"><link rel="stylesheet" href="/ihale-listele-demo/assets/llm.css?v=3e6f51d122d7"><link rel="stylesheet" href="/ihale-listele-demo/assets/bulletins.css?v=f60291ee2aca"><link rel="stylesheet" href="/ihale-listele-demo/assets/direct-procurements.css?v=1df541ac9f82">
-<script src="/ihale-listele-demo/assets/app-config.js?v=160578a42aef"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script><script src="/ihale-listele-demo/assets/header.js?v=8b16b6691836" defer></script><script src="/ihale-listele-demo/assets/direct-procurements.js?v=b1cd1972d146" defer></script>
+<script src="/ihale-listele-demo/assets/app-config.js?v=160578a42aef"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script><script src="/ihale-listele-demo/assets/header.js?v=8b16b6691836" defer></script><script src="/ihale-listele-demo/assets/direct-procurements.js?v=556a1f99f745" defer></script>
 <style>[data-requires-admin] main{visibility:hidden}</style></head><body data-requires-admin><site-header></site-header><main id="main" class="personal-page bulletin-page dt-page">
 <p class="eyebrow">VERİ AKTARIMI · EKAP</p><h1>Doğrudan teminler</h1>
 <p class="intro-copy">EKAP’ın eski arama ekranındaki duyuruları önce inceleyin, ardından ihale listesine aktarın.</p>
@@ -16,19 +16,20 @@
 <label class="dt-wide">İdarenin ili<select id="dt-city"><option value="">Tüm iller</option></select></label>
 <label>Son teklif tarihi · başlangıç<input id="dt-from" type="date"></label><label>Son teklif tarihi · bitiş<input id="dt-to" type="date"></label>
 <label>Başlangıç sayfası<input id="dt-start-page" type="number" min="1" max="10000" value="1" required></label>
-<label>Okunacak sayfa sayısı<input id="dt-max-pages" type="number" min="1" max="20" value="1" required></label></div>
-<p class="bulletin-help">Kayıtlar DT numarasına göre yeniden eskiye okunur. Sayfa sayısı, bu denemede okunacak üst sınırdır; tüm EKAP kaydı sayısı değildir.</p>
-<div class="bulletin-actions dt-actions"><button class="primary" id="dt-preview" type="submit" disabled>Önizlemeyi hazırla →</button><button id="dt-next-batch" type="button" hidden>Sonraki sayfalara geç</button></div>
+<label>Önizleme sayfa sayısı<input id="dt-max-pages" type="number" min="1" max="20" value="1" required></label></div>
+<p class="bulletin-help">Kayıtlar DT numarasına göre yeniden eskiye okunur. Sayfa sayısı yalnızca önizlemeyi sınırlar. Tam aktarım, seçilen başlangıç sayfasından boş sayfa gelene kadar ilerler ve her sayfayı otomatik kaydeder.</p>
+<div class="bulletin-actions dt-actions"><button class="primary" id="dt-collect" type="button" disabled>Aramanın sonuna kadar aktar →</button><button id="dt-preview" type="submit" disabled>Önizlemeyi hazırla</button><button id="dt-next-batch" type="button" hidden>Sonraki sayfalara geç</button></div>
 </form></section>
 <section class="personal-card bulletin-job"><div><h2>İşlem durumu</h2><p id="dt-status" role="status" aria-live="polite">Yükleniyor…</p>
 <label id="dt-progress-label" for="dt-progress">Henüz işlem yok</label><progress class="llm-progress" id="dt-progress" max="1" value="0"></progress>
 <p id="dt-message" class="bulletin-help"></p><p id="dt-counts" class="dt-counts"></p>
-<div class="bulletin-actions"><button id="dt-import" class="primary" type="button" disabled>Önizlemeyi aktar</button><button id="dt-stop" type="button" hidden>İşlemi durdur</button></div>
-<p class="bulletin-help">Önizleme veritabanını değiştirmez. Aktarım mevcut kayıtları günceller, mükerrer kayıt oluşturmaz. LLM çağrısı yapılmaz; sektör kurallarla bulunamazsa LLM panelinden tamamlanabilir.</p>
+<p id="dt-resume-note" class="bulletin-help" hidden></p>
+<div class="bulletin-actions"><button id="dt-import" class="primary" type="button" disabled>Önizlemeyi aktar</button><button id="dt-resume" class="primary" type="button" hidden>Kaldığım yerden devam et →</button><button id="dt-stop" type="button" hidden>İşlemi durdur</button></div>
+<p class="bulletin-help">Tam aktarımda ekran kapansa da işlem sürer. Kesilirse kayıtlı filtrelerle kaldığınız sayfadan devam edilir. Önizleme veritabanını değiştirmez. Aktarım mükerrer oluşturmaz ve LLM çağrısı yapmaz.</p>
 </div></section></div>
 <section class="bulletin-history" aria-labelledby="dt-results-heading"><div class="bulletin-history-header"><div><h2 id="dt-results-heading">Aktarılacak kayıtlar</h2><p class="bulletin-help" id="dt-result-note">Önizleme hazırladığınızda kayıtlar burada görünür.</p></div><button id="dt-refresh" type="button">Yenile ↻</button></div>
 <div class="bulletin-table-scroll" role="region" aria-label="Doğrudan temin önizlemesi" tabindex="0"><table class="bulletin-table dt-table"><thead><tr><th scope="col">DT numarası / alım</th><th scope="col">Kurum</th><th scope="col">İdarenin ili</th><th scope="col">Tür</th><th scope="col">Son teklif tarihi</th><th scope="col">İncele</th></tr></thead><tbody id="dt-rows"></tbody></table></div>
-<p class="bulletin-help">Şehir, EKAP’ın açıkça verdiği idare ilidir; işin teslim yeri olduğu varsayılmaz. Kaynak tarihinin anlamı doğrulanamadığı için yayın tarihi boş bırakılır. Kaynak ayrıntısı ayrıca doğrulama isteyebilir; bu ekranda belge indirilmez.</p>
+<p class="bulletin-help">Şehir idarenin ilidir; teslim yeri olduğu varsayılmaz. Yayın tarihi doğrulanamadığı için boş bırakılır. Ayrıntı doğrulama isteyebilir; belge indirilmez. Kaynak listesi canlıdır; aktarım sırasında eklenen veya listeden kalkan duyurular için daha sonra ilk sayfadan güncelleme yapılabilir.</p>
 <nav class="pagination" aria-label="Önizleme sayfaları"><button id="dt-prev" type="button" disabled>← Önceki</button><span id="dt-page-label"></span><button id="dt-next" type="button" disabled>Sonraki →</button></nav>
 </section>
 <section class="dt-history"><h2>Son işlemler</h2><div id="dt-history"></div></section>
