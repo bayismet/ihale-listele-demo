@@ -10,7 +10,6 @@ const skipLabels = {uncertain:"Yeterli bilgi yok veya model emin değil",unsuppo
 function error(text) { el("llm-error").textContent = text; el("llm-error").hidden = !text; }
 function updateButtons() {
   el("sector-start").disabled = busy || requestPending || !currentCounts.sector;
-  el("sector_migration-start").disabled = busy || requestPending || !currentCounts.sector_migration;
   const cityTotal = currentCounts.city + (el("city-retry").checked ? currentCounts.city_retry : 0);
   el("city-start").disabled = busy || requestPending || !cityTotal;
   el("city-retry").disabled = busy || requestPending;
@@ -22,7 +21,6 @@ async function refresh() {
     const data = await response.json();
     currentCounts = {...data.counts, city_retry: data.counts.city_retry || 0};
     el("sector-count").textContent = data.counts.sector;
-    el("sector_migration-count").textContent = data.counts.sector_migration || 0;
     el("city-count").textContent = data.counts.city;
     el("city-retry-count").textContent = currentCounts.city_retry;
     el("city-retry-note").hidden = !currentCounts.city_retry;
@@ -30,7 +28,7 @@ async function refresh() {
     updateButtons();
     el("job-stop").hidden = !busy;
     const job = data.job;
-    el("job-status").textContent = job ? `${job.kind === "city" ? "Şehir" : job.kind === "sector_migration" ? "Kategori geçişi" : "Sektör"} · ${labels[job.status] || job.status}` : "Henüz işlem başlatılmadı.";
+    el("job-status").textContent = job ? `${job.kind === "city" ? "Şehir" : job.kind === "sector_migration" ? "Kategori geçişi" : "Kategori"} · ${labels[job.status] || job.status}` : "Henüz işlem başlatılmadı.";
     const total = Math.max(0, Number(job?.total) || 0);
     const done = Math.min(total, Math.max(0, Number(job?.done) || 0));
     const percent = total ? Math.floor(done / total * 100) : job?.status === "completed" ? 100 : 0;
@@ -57,11 +55,11 @@ async function refresh() {
       el("job-counts").textContent = `${job.done}/${job.total} işlendi · ${job.saved} kaydedildi · ${job.skipped} atlandı · ${job.failed} hata · ${job.seconds_per_record} sn/kayıt`;
       el("job-note").textContent = job.message || "";
     }
-  } catch (err) { error(err.message); for (const kind of ["sector", "city", "sector_migration"]) el(`${kind}-start`).disabled = true; }
+  } catch (err) { error(err.message); for (const kind of ["sector", "city"]) el(`${kind}-start`).disabled = true; }
 }
 async function command(action, payload) {
   requestPending = true;
-  el("sector-start").disabled = el("city-start").disabled = el("sector_migration-start").disabled = true;
+  el("sector-start").disabled = el("city-start").disabled = true;
   error("");
   try {
     const response = await IhaleApp.fetch(`/api/local/llm/${action}`, {method:"POST",headers:{"Content-Type":"application/json","X-Requested-With":"IhaleListele"},body:payload ? JSON.stringify(payload) : undefined});
@@ -71,7 +69,7 @@ async function command(action, payload) {
   } catch (err) { error(err.message); }
   finally { requestPending = false; await refresh(); }
 }
-for (const kind of ["sector", "city", "sector_migration"]) el(`${kind}-start`).addEventListener("click", () => {
+for (const kind of ["sector", "city"]) el(`${kind}-start`).addEventListener("click", () => {
   const input = el("batch-limit");
   if (!input.reportValidity() || !Number.isInteger(Number(input.value))) return;
   command("start", {kind,limit:Number(input.value),retry_skipped:kind === "city" && el("city-retry").checked});
