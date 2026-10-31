@@ -7,7 +7,7 @@
   <title>İhaleler · İhale Listele</title>
   <link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=cf4f405fc8c2">
   <script src="/ihale-listele-demo/assets/app-config.js?v=160578a42aef"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script><script src="/ihale-listele-demo/assets/header.js?v=8b16b6691836" defer></script>
-  <script src="/ihale-listele-demo/assets/catalog.js?v=520911bc3cf2" defer></script>
+  <script src="/ihale-listele-demo/assets/catalog.js?v=9116bef4eba3" defer></script>
 </head>
 <body data-requires-member>
   <site-header></site-header>
@@ -23,6 +23,10 @@
           <div class="filter-heading"><h2>Filtreler</h2><button type="button" id="clear-filters">Temizle</button></div>
           <label for="activity_status">İhale durumu</label><select form="search-form" name="activity_status" id="activity_status"><option value="active">Aktif ihaleler</option><option value="inactive">Pasif ihaleler</option><option value="unknown">Durumu belirsiz</option><option value="all">Tüm ihaleler</option></select><label for="source_id">Kaynak</label><select form="search-form" name="source_id" id="source_id"><option value="">Tüm kaynaklar</option></select>
           <label for="category">Kategori</label><select form="search-form" name="category" id="category"><option value="">Tüm kategoriler</option></select>
+          <label for="procurement_type">İhale türü</label><select form="search-form" name="procurement_type" id="procurement_type"><option value="">Tüm ihale türleri</option></select>
+          <label for="purchase_type">Alım türü</label><select form="search-form" name="purchase_type" id="purchase_type"><option value="">Tüm alım türleri</option></select>
+          <label for="legal_scope">Kapsam</label><select form="search-form" name="legal_scope" id="legal_scope"><option value="">Tüm kapsamlar</option></select>
+          <label for="electronic_price">E-fiyat teklifi · doğrudan temin</label><select form="search-form" name="electronic_price" id="electronic_price"><option value="">Tümü</option><option value="yes">Var</option><option value="no">Yok</option><option value="unknown">Bilinmiyor</option></select>
           <div id="city-filter" class="filter-group"><label for="city">Şehir</label><select form="search-form" name="city" id="city"><option value="">Tüm şehirler</option></select></div>
           <fieldset><legend>Yayın tarihi</legend><label class="date-label" for="published_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="published_from" name="published_from"><label class="date-label" for="published_to">Bu tarihe kadar</label><input form="search-form" type="date" id="published_to" name="published_to"></fieldset>
           <fieldset><legend>İhale tarihi</legend><label class="date-label" for="tender_from">Bu tarihten itibaren</label><input form="search-form" type="date" id="tender_from" name="tender_from"><label class="date-label" for="tender_to">Bu tarihe kadar</label><input form="search-form" type="date" id="tender_to" name="tender_to"></fieldset>

@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Doğrudan teminler · İhale Listele</title>
-<link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=cf4f405fc8c2"><link rel="stylesheet" href="/ihale-listele-demo/assets/personal.css?v=9968383b9ba5"><link rel="stylesheet" href="/ihale-listele-demo/assets/llm.css?v=3e6f51d122d7"><link rel="stylesheet" href="/ihale-listele-demo/assets/bulletins.css?v=f60291ee2aca"><link rel="stylesheet" href="/ihale-listele-demo/assets/direct-procurements.css?v=1df541ac9f82">
-<script src="/ihale-listele-demo/assets/app-config.js?v=160578a42aef"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script><script src="/ihale-listele-demo/assets/header.js?v=8b16b6691836" defer></script><script src="/ihale-listele-demo/assets/direct-procurements.js?v=556a1f99f745" defer></script>
+<link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=cf4f405fc8c2"><link rel="stylesheet" href="/ihale-listele-demo/assets/personal.css?v=9968383b9ba5"><link rel="stylesheet" href="/ihale-listele-demo/assets/llm.css?v=3e6f51d122d7"><link rel="stylesheet" href="/ihale-listele-demo/assets/bulletins.css?v=f60291ee2aca"><link rel="stylesheet" href="/ihale-listele-demo/assets/direct-procurements.css?v=e41d2ce25f9e">
+<script src="/ihale-listele-demo/assets/app-config.js?v=160578a42aef"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script><script src="/ihale-listele-demo/assets/header.js?v=8b16b6691836" defer></script><script src="/ihale-listele-demo/assets/direct-procurements.js?v=a8ba7ad28ac0" defer></script>
 <style>[data-requires-admin] main{visibility:hidden}</style></head><body data-requires-admin><site-header></site-header><main id="main" class="personal-page bulletin-page dt-page">
 <p class="eyebrow">VERİ AKTARIMI · EKAP</p><h1>Doğrudan teminler</h1>
 <p class="intro-copy">EKAP’ın eski arama ekranındaki duyuruları önce inceleyin, ardından ihale listesine aktarın.</p>
@@ -14,6 +14,9 @@
 <label>Yıl<select id="dt-year" required></select></label>
 <label>Alım türü<select id="dt-kind"><option value="">Tüm türler</option><option value="1">Mal</option><option value="2">Yapım</option><option value="3">Hizmet</option><option value="4">Danışmanlık</option></select></label>
 <label class="dt-wide">İdarenin ili<select id="dt-city"><option value="">Tüm iller</option></select></label>
+<label class="dt-wide">Kapsam<select id="dt-scope"><option value="">Tüm kapsamlar</option><option value="101">4734 kapsamında</option><option value="102">İstisna</option><option value="103">Kapsam dışı</option></select></label>
+<label class="dt-wide"><span><input id="dt-eprice" type="checkbox"> Yalnızca e-fiyat teklifi alınanlar</span></label>
+<label class="dt-wide"><span><input id="dt-resolve-eprice" type="checkbox" checked> Tam aktarımda yeni kayıtların e-fiyat bilgisini de doğrula</span></label>
 <label>Son teklif tarihi · başlangıç<input id="dt-from" type="date"></label><label>Son teklif tarihi · bitiş<input id="dt-to" type="date"></label>
 <label>Başlangıç sayfası<input id="dt-start-page" type="number" min="1" max="10000" value="1" required></label>
 <label>Önizleme sayfa sayısı<input id="dt-max-pages" type="number" min="1" max="20" value="1" required></label></div>
@@ -24,6 +27,7 @@
 <label id="dt-progress-label" for="dt-progress">Henüz işlem yok</label><progress class="llm-progress" id="dt-progress" max="1" value="0"></progress>
 <p id="dt-message" class="bulletin-help"></p><p id="dt-counts" class="dt-counts"></p>
 <p id="dt-resume-note" class="bulletin-help" hidden></p>
+<div id="dt-eprice-job" hidden><label id="dt-eprice-label" for="dt-eprice-progress">E-fiyat doğrulaması</label><progress id="dt-eprice-progress" class="llm-progress" max="1" value="0"></progress><p id="dt-eprice-status" class="bulletin-help" role="status"></p></div>
 <div class="bulletin-actions"><button id="dt-import" class="primary" type="button" disabled>Önizlemeyi aktar</button><button id="dt-resume" class="primary" type="button" hidden>Kaldığım yerden devam et →</button><button id="dt-stop" type="button" hidden>İşlemi durdur</button></div>
 <p class="bulletin-help">Tam aktarımda ekran kapansa da işlem sürer. Kesilirse kayıtlı filtrelerle kaldığınız sayfadan devam edilir. Önizleme veritabanını değiştirmez. Aktarım mükerrer oluşturmaz ve LLM çağrısı yapmaz.</p>
 </div></section></div>

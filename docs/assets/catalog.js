@@ -1,7 +1,10 @@
 "use strict";
 const $ = id => document.getElementById(id);
 const form = $("search-form");
-const fields = ["q", "activity_status", "source_id", "category", "city", "published_from", "published_to", "tender_from", "tender_to", "deadline_from", "deadline_to", "sort"];
+const fields = ["q", "activity_status", "source_id", "category", "city", "procurement_type", "purchase_type", "legal_scope", "electronic_price", "published_from", "published_to", "tender_from", "tender_to", "deadline_from", "deadline_to", "sort"];
+const procurementLabels = {tender:"İhale",direct_procurement:"Doğrudan temin"};
+const purchaseLabels = {goods:"Mal",works:"Yapım",services:"Hizmet",consultancy:"Danışmanlık"};
+const scopeLabels = {law_4734:"4734 kapsamında",exception:"İstisna",outside_4734:"Kapsam dışı"};
 let activePage = 1;
 let currentRequest;
 const favoriteIds = new Set();
@@ -91,6 +94,8 @@ function card(item) {
   link.href = IhaleApp.href(`/tenders/${encodeURIComponent(item.id)}${location.search}`);
   const top = node("div", null, "card-top");
   top.append(node("span", item.source_name, "source-tag"));
+  if (item.procurement_type) top.append(node("span",procurementLabels[item.procurement_type] || item.procurement_type,"source-tag"));
+  if (item.purchase_type) top.append(node("span",purchaseLabels[item.purchase_type] || item.purchase_type,"source-tag"));
   top.append(node("span", activityLabel(item.activity_status), `activity-badge activity-${item.activity_status}`));
   if (item.registration_number || item.external_id) top.append(node("span", item.registration_number ? `İKN ${item.registration_number}` : `Kayıt ${item.external_id}`, "reference"));
   link.append(top);
@@ -162,6 +167,9 @@ async function initCatalog() {
     filters.sources.forEach(source => addOption($("source_id"), source.id, source.name));
     filters.categories.forEach(category => addOption($("category"), category, category));
     filters.cities.forEach(city => addOption($("city"), city, city));
+    for (const [field, values] of [["procurement_type",filters.procurement_types], ["purchase_type",filters.purchase_types], ["legal_scope",filters.legal_scopes]]) {
+      Object.entries(values || {}).forEach(([value,label]) => addOption($(field),value,label));
+    }
     // Retain a shared filter value even if it has no currently visible facet.
     const params = new URLSearchParams(location.search);
     $("city-filter").hidden = filters.cities.length === 0 && !params.get("city");
@@ -191,6 +199,11 @@ async function initDetail(id) {
       ["Kaynak kayıt numarası", item.external_id || "Belirtilmemiş"],
       ["Sektör", item.category || "Henüz sınıflandırılmamış"],
       ["Kaynak kategorisi", item.source_category || "Kaynakta belirtilmemiş"],
+      ["İhale türü", procurementLabels[item.procurement_type] || "Kaynakta belirtilmemiş"],
+      ["Alım türü", purchaseLabels[item.purchase_type] || "Kaynakta belirtilmemiş"],
+      ["Kapsam", scopeLabels[item.legal_scope] || "Kaynakta belirtilmemiş"],
+      ["Dayanak / madde", item.legal_basis || "Kaynakta belirtilmemiş"],
+      ["E-fiyat teklifi", item.procurement_type === "tender" ? "Uygulanmıyor" : item.procurement_type !== "direct_procurement" ? "Bilinmiyor" : item.electronic_price_offer === true ? "Var" : item.electronic_price_offer === false ? "Yok" : "Bilinmiyor"],
       ["Şehir", item.city || "Belirtilmemiş"],
       ["İşin yapılacağı / teslim yeri", item.location_text || "Kaynakta belirtilmemiş"],
       ["Yayın tarihi", dateLabel(item.published_at)],

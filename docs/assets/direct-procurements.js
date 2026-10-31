@@ -15,13 +15,22 @@ IhaleApp.adminReady.then(allowed => {
     return new Intl.DateTimeFormat("tr-TR", {day:"2-digit",month:"2-digit",year:"numeric", ...(withTime ? {hour:"2-digit",minute:"2-digit"} : {}),timeZone:"Europe/Istanbul"}).format(new Date(withTime ? value : `${value}T12:00:00+03:00`));
   }
   function options() {
-    return {year:Number(el("dt-year").value),kind:el("dt-kind").value,city_code:el("dt-city").value,deadline_from:el("dt-from").value || null,deadline_to:el("dt-to").value || null,start_page:Number(el("dt-start-page").value),max_pages:Number(el("dt-max-pages").value)};
+    return {year:Number(el("dt-year").value),kind:el("dt-kind").value,city_code:el("dt-city").value,scope:el("dt-scope").value,electronic_price_only:el("dt-eprice").checked,resolve_electronic_price:el("dt-resolve-eprice").checked,deadline_from:el("dt-from").value || null,deadline_to:el("dt-to").value || null,start_page:Number(el("dt-start-page").value),max_pages:Number(el("dt-max-pages").value)};
   }
   function render(data) {
     latest = data;
     const job = data.job, busy = data.busy || actionPending;
     const streaming = job?.mode === "collect";
     error(data.problem);
+    const price = data.electronic_price_completion;
+    el("dt-eprice-job").hidden = !price;
+    if (price) {
+      el("dt-eprice-progress").max = Math.max(1,price.total || 1);
+      el("dt-eprice-progress").value = price.done || 0;
+      el("dt-eprice-label").textContent = `E-fiyat doğrulaması · ${price.done || 0} / ${price.total || 0} kayıt`;
+      const state = {running:"Kontrol sürüyor",completed:"Tamamlandı",failed:"İşlem kesildi; kaydedilen sonuçlar korundu",stopped:"Durduruldu"}[price.status] || price.status;
+      el("dt-eprice-status").textContent = `${state} · ${price.yes || 0} var · ${price.no || 0} yok · ${price.unknown || 0} bilinmiyor`;
+    }
     el("dt-status").textContent = streaming && job?.status === "collecting" ? "Tam aktarım sürüyor" : labels[job?.status] || "İlk önizlemenizi hazırlayın";
     el("dt-message").textContent = job?.message || "Arama seçeneklerini belirleyip başlayın.";
     el("dt-preview").disabled = busy || data.can_preview === false;
@@ -37,7 +46,8 @@ IhaleApp.adminReady.then(allowed => {
       const saved = job.options || {};
       const city = saved.city_code ? provinces[Number(saved.city_code)-1] : "Tüm iller";
       const kind = {"1":"Mal","2":"Yapım","3":"Hizmet","4":"Danışmanlık"}[saved.kind] || "Tüm türler";
-      el("dt-resume-note").textContent = `Kayıtlı arama: ${saved.year} · ${city} · ${kind} · ${saved.deadline_from ? dateText(saved.deadline_from) : "Başlangıç tarihi yok"} – ${saved.deadline_to ? dateText(saved.deadline_to) : "Bitiş tarihi yok"}. ${job.exhausted ? "Aramanın sonuna ulaşıldı." : `Devam noktası: ${job.next_page || saved.start_page}. sayfa. Devam et düğmesi bu kayıtlı filtreleri kullanır.`}`;
+      const scope = {"101":"4734 kapsamında","102":"İstisna","103":"Kapsam dışı"}[saved.scope] || "Tüm kapsamlar";
+      el("dt-resume-note").textContent = `Kayıtlı arama: ${saved.year} · ${city} · ${kind} · ${scope}${saved.electronic_price_only ? " · E-fiyat teklifi alınanlar" : ""} · ${saved.deadline_from ? dateText(saved.deadline_from) : "Başlangıç tarihi yok"} – ${saved.deadline_to ? dateText(saved.deadline_to) : "Bitiş tarihi yok"}. ${job.exhausted ? "Aramanın sonuna ulaşıldı." : `Devam noktası: ${job.next_page || saved.start_page}. sayfa. Devam et düğmesi bu kayıtlı filtreleri kullanır.`}`;
     }
     el("dt-import").textContent = data.total ? `${data.total.toLocaleString("tr-TR")} kaydı aktar →` : "Önizlemeyi aktar";
     el("dt-next-batch").hidden = streaming || busy || !job?.next_page || !["ready","completed"].includes(job?.status);
