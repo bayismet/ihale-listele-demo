@@ -8,6 +8,7 @@ const navigation = [
   { href: "/admin/connection", label: "Bağlantı", adminOnly: true },
   { href: "/favorites", label: "Favorilerim", memberOnly: true },
   { href: "/calendar", label: "Takvim", memberOnly: true },
+  { href: "/notifications", label: "Bildirimler", memberOnly: true, notifications: true },
   { href: "/account", label: "Giriş / Üye ol", account: true },
 ];
 
@@ -54,6 +55,26 @@ class SiteHeader extends HTMLElement {
       const link = document.createElement("a");
       link.href = IhaleApp.href(item.href);
       link.textContent = item.label;
+      if (item.notifications) {
+        link.classList.add("notification-link");
+        link.title = "Bildirimler";
+        link.setAttribute("aria-label", "Bildirimler");
+        const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        icon.setAttribute("viewBox", "0 0 24 24");
+        icon.setAttribute("width", "21");
+        icon.setAttribute("height", "21");
+        icon.setAttribute("fill", "none");
+        icon.setAttribute("stroke", "currentColor");
+        icon.setAttribute("stroke-width", "1.7");
+        icon.setAttribute("aria-hidden", "true");
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", "M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4");
+        icon.append(path);
+        const count = document.createElement("span");
+        count.className = "notification-count";
+        count.hidden = true;
+        link.replaceChildren(icon, count);
+      }
       if (item.adminOnly) {
         link.dataset.adminOnly = "true";
         link.hidden = true;
@@ -79,6 +100,7 @@ class SiteHeader extends HTMLElement {
     this.showAdminLinks();
     this.showAccountLink();
     window.addEventListener("ihale-account-changed", () => { this.showAdminLinks(); this.showAccountLink(); });
+    window.addEventListener("ihale-notifications-changed", () => this.refreshNotificationCount());
   }
 
   showSourceTabs(currentPath) {
@@ -156,8 +178,37 @@ class SiteHeader extends HTMLElement {
       if (!result.user) return;
       if (link) link.textContent = result.user.role === "admin" ? "Yönetici hesabı" : "Hesabım";
       this.querySelectorAll("[data-member-only]").forEach(item => { item.hidden = false; });
+      this.refreshNotificationCount();
+      if (!this.notificationTimer) this.notificationTimer = setInterval(() => {
+        if (!document.hidden) this.refreshNotificationCount();
+      }, 60000);
     } catch (_) {
       // Keep the sign-in link available when account status cannot be checked.
+    }
+  }
+
+  async refreshNotificationCount() {
+    const link = this.querySelector(".notification-link");
+    if (!link || link.hidden) return;
+    if (this.notificationCountPending) { this.notificationCountAgain = true; return; }
+    this.notificationCountPending = true;
+    try {
+      const response = await IhaleApp.fetch("/api/me/notifications/unread-count", {cache:"no-store"});
+      if (!response.ok) return;
+      const data = await response.json();
+      const count = Math.max(0, Number(data.unread_count) || 0);
+      const badge = link.querySelector(".notification-count");
+      badge.textContent = count > 99 ? "99+" : String(count);
+      badge.hidden = !count;
+      link.setAttribute("aria-label", count ? `Bildirimler, ${count} okunmamış` : "Bildirimler");
+    } catch (_) {
+      // Preserve navigation when the connection is temporarily unavailable.
+    } finally {
+      this.notificationCountPending = false;
+      if (this.notificationCountAgain) {
+        this.notificationCountAgain = false;
+        this.refreshNotificationCount();
+      }
     }
   }
 }

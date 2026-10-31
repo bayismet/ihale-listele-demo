@@ -30,6 +30,7 @@ async function removeFavorite(item) {
   });
   if (!response.ok) throw new Error();
   favorites = favorites.filter(favorite => favorite.id !== item.id);
+  window.dispatchEvent(new Event("ihale-notifications-changed"));
   renderFavorites();
 }
 function renderFavorites() {

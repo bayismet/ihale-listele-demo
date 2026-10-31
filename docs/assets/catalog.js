@@ -40,6 +40,7 @@ function favoriteButton(item) {
       });
       if (!response.ok) throw new Error();
       if (isFavorite) favoriteIds.delete(item.id); else favoriteIds.add(item.id);
+      window.dispatchEvent(new Event("ihale-notifications-changed"));
       button.textContent = favoriteIds.has(item.id) ? "★" : "☆";
       button.setAttribute("aria-pressed", String(favoriteIds.has(item.id)));
       button.setAttribute("aria-label", favoriteIds.has(item.id) ? "Favorilerden çıkar" : "Favorilere ekle");

@@ -1,0 +1,27 @@
+<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bildirimler · İhale Listele</title>
+<link rel="stylesheet" href="/ihale-listele-demo/assets/catalog.css?v=cf4f405fc8c2">
+<link rel="stylesheet" href="/ihale-listele-demo/assets/personal.css?v=9968383b9ba5"><link rel="stylesheet" href="/ihale-listele-demo/assets/notifications.css?v=e30200d028c2">
+<script src="/ihale-listele-demo/assets/app-config.js?v=a0fdb13aae1e"></script><script src="/ihale-listele-demo/assets/client.js?v=540ddeab2146"></script>
+<script src="/ihale-listele-demo/assets/header.js?v=48d77cc2696f" defer></script>
+<script src="/ihale-listele-demo/assets/notifications.js?v=d9202ac20340" defer></script>
+</head><body data-requires-member><site-header></site-header>
+<main id="main" class="personal-page notifications-page">
+<p class="eyebrow">FAVORİ İHALELERİNİZ</p><h1>Son tarihleri <em>kaçırmayın.</em></h1>
+<p class="intro-copy">Favori ihalelerinizin son tarihinden 7 gün önce ve son 24 saatte hatırlatma alırsınız. Tarihi geçen, iptal edilen veya favorilerinizden çıkardığınız ihaleler burada gösterilmez.</p>
+<section class="notification-preferences" aria-labelledby="notification-settings-heading">
+<h2 id="notification-settings-heading">Hatırlatma tercihleriniz</h2>
+<label class="preference-choice"><input type="checkbox" id="notifications-enabled" disabled> Site içi son tarih hatırlatmaları</label>
+<p>Her ihale ve son tarih için aynı hatırlatma bir kez oluşturulur.</p>
+<label class="preference-choice preference-unavailable"><input type="checkbox" disabled> E-posta hatırlatmaları <span>Yakında</span></label>
+<p>E-posta gönderimi henüz etkin değil. Mail servisi bağlandığında bu seçenek kullanıma açılacak.</p>
+<p id="preference-status" role="status" aria-live="polite" hidden></p>
+</section>
+<div id="notifications-error" class="notification-error" role="alert" hidden></div>
+<div class="notifications-toolbar"><div><h2>Bildirimleriniz <span id="unread-summary"></span></h2><label><input type="checkbox" id="only-unread"> Yalnızca okunmamışlar</label></div><button type="button" id="read-all" class="secondary" disabled>Tümünü okundu işaretle</button></div>
+<div id="notifications-list" class="personal-items" aria-live="polite" aria-busy="true"><p class="message">Bildirimler yükleniyor…</p></div>
+<nav id="notifications-pagination" class="pagination" aria-label="Bildirim sayfaları" hidden><button type="button" id="notifications-prev">← Önceki</button><span id="notifications-page"></span><button type="button" id="notifications-next">Sonraki →</button></nav>
+<p class="notification-footnote">Bildirimler güncel son teklif tarihine göre hesaplanır. Saat belirtilmeyen kayıtlarda son gün esas alınır. Güncel koşulları resmî kaynaktan kontrol edin.</p>
+</main><footer><a class="footer-brand" href="/ihale-listele-demo/">ihalelistele</a><span>Takip ettiğiniz fırsatlar, zamanında hatırlansın.</span><a href="/ihale-listele-demo/favorites">Favorilerime dön ↗</a></footer>
+</body></html>
