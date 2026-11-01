@@ -24,6 +24,9 @@ async function refresh() {
     const response = await IhaleApp.fetch("/api/local/llm/status", {cache:"no-store"});
     if (!response.ok) throw new Error(response.status === 401 || response.status === 403 ? "Yönetici hesabıyla giriş yapmalısınız." : "İşlem durumu alınamadı.");
     const data = await response.json();
+    el("worker-status").textContent = data.worker?.mode === "remote"
+      ? data.worker.online ? "Mac bağlı; işler yerel modelde işlenir." : "Mac bağlantısı bekleniyor. Başlatılan işler sunucuda saklanır."
+      : "LLM işlemleri mevcut uygulama ortamında çalışıyor.";
     currentCounts = {...data.counts, city_retry: data.counts.city_retry || 0};
     el("sector-count").textContent = data.counts.sector;
     el("city-count").textContent = data.counts.city;
@@ -42,7 +45,9 @@ async function refresh() {
     el("job-percent").textContent = `%${percent}`;
     el("job-progress-label").textContent = `${done.toLocaleString("tr-TR")} / ${total.toLocaleString("tr-TR")} kayıt işlendi`;
     el("job-progress").setAttribute("aria-valuetext", `%${percent}, ${done} / ${total} kayıt`);
-    if (busy && done > 0 && job.seconds_per_record > 0) {
+    if (busy && job?.execution === "remote" && !data.worker?.online) {
+      el("job-remaining").textContent = "Mac bağlantısı bekleniyor; tamamlanan kayıtlar korunuyor.";
+    } else if (busy && done > 0 && job.seconds_per_record > 0) {
       const seconds = Math.ceil((total - done) * job.seconds_per_record);
       const minutes = Math.ceil(seconds / 60);
       el("job-remaining").textContent = seconds < 60 ? "Tahmini kalan süre: 1 dakikadan az" : `Tahmini kalan süre: ${minutes.toLocaleString("tr-TR")} dakika`;
