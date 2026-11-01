@@ -1,2 +1,2 @@
 "use strict";
-window.IHALE_CONFIG = {"basePath": "/ihale-listele-demo", "apiUrl": "https://questions-proposition-trainers-mins.trycloudflare.com", "remote": true};
+window.IHALE_CONFIG = {"basePath": "/ihale-listele-demo", "apiUrl": "https://june-survive-violations-minolta.trycloudflare.com", "remote": true};
